@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navgrah Agarbatti - Premium Incense Products</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2E7D32;
+            --secondary-color: #4CAF50;
+            --accent-color: #FF9800;
+            --text-color: #333333;
+            --light-bg: #f8fdf8;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --dark-color: #343a40;
+            --font-family: 'Poppins', sans-serif;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            padding-top: 60px;
+            padding-bottom: 60px;
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            --light-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --border-color: #404040;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-spinner.active { display: flex; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            color: white;
+            z-index: 1001;
+            box-shadow: var(--box-shadow);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+        .toast.show { transform: translateX(0); }
+        .toast.success { background-color: var(--success-color); }
+        .toast.error { background-color: var(--danger-color); }
+        .toast.warning { background-color: var(--warning-color); color: var(--text-color); }
+        .toast.info { background-color: var(--info-color); }
+
+        /* Page System */
+        .page { 
+            display: none; 
+            min-height: calc(100vh - 120px);
+        }
+        .page.active { display: block; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            z-index: 1;
+        }
+        
+        button, .btn {
+            padding: 12px 20px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        button:hover, .btn:hover { 
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+        }
+        button:disabled, .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-accent { background-color: var(--accent-color); }
+        .btn-accent:hover { background-color: #f57c00; }
+        .btn-danger { background-color: var(--danger-color); }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-success { background-color: var(--success-color); }
+        .btn-success:hover { background-color: #218838; }
+        .btn-info { background-color: var(--info-color); }
+        .btn-info:hover { background-color: #138496; }
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Google Login Button Styles */
+        .google-login-btn {
+            background: white;
+            color: #333;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .google-login-btn:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+            transform: translateY(-2px);
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-family: var(--font-family);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+        .header .logo { 
+            font-size: 1.5rem; 
+            font-weight: 600; 
+            color: white; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header .header-icons { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        .header .search-icon { 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            color: white;
+        }
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+        #login-status-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            display: none;
+        }
+        #login-status-indicator.active { display: block; }
+
+        /* Side Menu - Half Screen */
+        .side-menu {
+            position: fixed;
+            top: 60px;
+            left: -50%;
+            width: 50%;
+            height: calc(100vh - 120px);
+            background-color: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 998;
+            transition: var(--transition);
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .side-menu.active {
+            left: 0;
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        .menu-item:hover {
+            background-color: rgba(46, 125, 50, 0.1);
+        }
+        .menu-item i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+        .menu-section {
+            padding: 15px 20px 5px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #666;
+            text-decoration: none;
+            position: relative;
+            transition: var(--transition);
+            background: none;
+            border: none;
+            font-family: var(--font-family);
+            cursor: pointer;
+        }
+        .nav-item.active { color: var(--primary-color); }
+        .nav-item i { font-size: 1.3rem; margin-bottom: 2px; }
+        .nav-item span { font-size: 0.7rem; font-weight: 500; }
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.6rem;
+            display: none;
+        }
+        .badge.active { display: block; }
+
+        /* Home Page Styles */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 20px 15px 10px;
+            color: var(--text-color);
+        }
+
+        /* Banner Styles */
+        .banner-container {
+            margin: 10px 15px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .banner {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .banner:hover {
+            transform: scale(1.02);
+        }
+
+        /* Categories Section - New Design */
+        .categories-section {
+            padding: 15px;
+            background: var(--card-bg);
+            margin: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            color: var(--text-color);
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid var(--border-color);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .category-card.active {
+            border-color: var(--primary-color);
+            background-color: rgba(46, 125, 50, 0.1);
+            transform: scale(1.02);
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+        }
+
+        .category-card i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .category-card h3 {
+            font-size: 0.85rem;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        /* All Products Button */
+        .all-products-btn {
+            background: var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .all-products-btn:hover {
+            transform: translateY(-2px);
+            background: #1b5e20;
+        }
+
+        /* Product Cards */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--danger-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product-info { 
+            padding: 15px; 
+        }
+        .product-info h3 { 
+            font-size: 1rem; 
+            margin-bottom: 8px; 
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 8px 0;
+        }
+        .rating-stars { 
+            color: var(--warning-color);
+            font-size: 0.9rem;
+        }
+        .rating-count { 
+            color: #666; 
+            font-size: 0.8rem; 
+        }
+        .price { 
+            color: var(--primary-color); 
+            font-weight: 600; 
+            font-size: 1.1rem;
+            margin: 5px 0;
+        }
+        .original-price {
+            text-decoration: line-through; 
+            color: #666; 
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+        .product-actions { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px 15px; 
+            border-top: 1px solid var(--border-color);
+            gap: 8px;
+        }
+        .view-details-btn {
+            flex: 1;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Product Detail Modal */
+        #product-detail-modal .modal-content {
+            max-width: 95%;
+            width: 95%;
+            max-height: 90vh;
+            padding: 0;
+        }
+        
+        .product-detail-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-image-section {
+            position: relative;
+            width: 100%;
+        }
+        
+        .main-product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .image-navigation {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            transform: translateY(-50%);
+        }
+        
+        .nav-btn {
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .nav-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: var(--light-bg);
+            overflow-x: auto;
+        }
+        
+        .thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .thumbnail.active {
+            border-color: var(--primary-color);
+        }
+        
+        .thumbnail:hover {
+            transform: scale(1.1);
+        }
+        
+        .product-detail-info {
+            padding: 20px;
+        }
+        
+        .product-detail-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .product-detail-price {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .product-detail-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .product-detail-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+        }
+        
+        .meta-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .meta-label {
+            font-size: 0.8rem;
+            color: #666;
+            display: block;
+        }
+        
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .contact-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .contact-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .contact-option:hover {
+            background: rgba(46, 125, 50, 0.1);
+        }
+        
+        .contact-option i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .contact-option.whatsapp i {
+            color: #25D366;
+        }
+        
+        .contact-option.call i {
+            color: var(--success-color);
+        }
+        
+        .contact-option.message i {
+            color: var(--info-color);
+        }
+        
+        .contact-option .contact-text {
+            flex: 1;
+        }
+        
+        .contact-option .contact-text h4 {
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .contact-option .contact-text p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Page Content Styles */
+        .page-content { 
+            padding: 0; 
+            background: var(--light-bg);
+            min-height: calc(100vh - 120px);
+        }
+        .page-content h1 { 
+            margin: 20px 15px; 
+            font-size: 1.4rem;
+            color: var(--text-color);
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        /* Web Settings & Help Section */
+        .settings-section {
+            background: var(--card-bg);
+            margin: 15px;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .contact-card {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        /* Users Table in Admin Panel */
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin: 15px;
+        }
+
+        .users-table th, .users-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .users-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .users-table tr:hover {
+            background: var(--light-bg);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+
+        /* Chat Bot Styles */
+        .chat-modal {
+            position: fixed;
+            bottom: 150px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 996;
+            display: none;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-modal.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            background: var(--light-bg);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .product-detail-container {
+                flex-direction: row;
+            }
+            .product-image-section {
+                width: 50%;
+            }
+            .main-product-image {
+                height: 400px;
+            }
+            .product-detail-info {
+                width: 50%;
+                padding: 30px;
+            }
+            .contact-options {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .contact-option {
+                flex: 1;
+                min-width: 200px;
+            }
+            .categories-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .side-menu {
+                width: 80%;
+                left: -80%;
+            }
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .users-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .side-menu {
+                width: 85%;
+                left: -85%;
+            }
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            .chat-modal {
+                width: 280px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <i class="fas fa-fire-alt"></i>
+            Navgrah Agarbatti
+        </div>
+        <div class="header-icons">
+            <button class="dark-mode-toggle" id="dark-mode-toggle" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <i class="fas fa-search search-icon" title="Search"></i>
+            <div id="login-status-indicator"></div>
+            <button class="btn btn-small" id="auth-btn" style="background: transparent; border: 1px solid white;">
+                <i class="fas fa-user"></i> Login
+            </button>
+        </div>
+    </header>
+
+    <!-- Side Menu - Half Screen -->
+    <div class="side-menu" id="side-menu">
+        <div class="menu-section">Main Menu</div>
+        <a href="javascript:void(0)" class="menu-item" data-hash="home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" data-hash="categories-page">
+            <i class="fas fa-th-large"></i>
+            <span>All Categories</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" data-hash="search">
+            <i class="fas fa-search"></i>
+            <span>Search Products</span>
+        </a>
+        
+        <div class="menu-section">Contact Options</div>
+        <a href="javascript:void(0)" class="menu-item" onclick="contactViaCall()">
+            <i class="fas fa-phone"></i>
+            <span>Call Us</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" onclick="contactViaWhatsApp()">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" onclick="contactViaMessage()">
+            <i class="fas fa-sms"></i>
+            <span>Send Message</span>
+        </a>
+        
+        <div class="menu-section">Account</div>
+        <a href="javascript:void(0)" class="menu-item" data-hash="profile">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" data-hash="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" data-hash="admin-panel">
+            <i class="fas fa-users-cog"></i>
+            <span>Admin Panel</span>
+        </a>
+        
+        <div class="menu-section">Information</div>
+        <a href="javascript:void(0)" class="menu-item" id="about-us-btn">
+            <i class="fas fa-info-circle"></i>
+            <span>About Company</span>
+        </a>
+        <a href="javascript:void(0)" class="menu-item" id="website-settings-btn">
+            <i class="fas fa-wrench"></i>
+            <span>Website Settings</span>
+        </a>
+
+        <div class="menu-section">Support</div>
+        <a href="javascript:void(0)" class="menu-item" id="chat-bot-btn">
+            <i class="fas fa-robot"></i>
+            <span>Chat Bot</span>
+        </a>
+    </div>
+
+    <!-- Chat Modal -->
+    <div class="chat-modal" id="chat-modal">
+        <div class="chat-header">
+            <h4>Navgrah Assistant</h4>
+            <span class="close-btn" id="close-chat">&times;</span>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                Hello! I'm Navgrah Assistant. How can I help you with our agarbatti products?
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button class="send-btn" id="send-message">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <main>
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <!-- Banner Section 1 -->
+            <div class="banner-container" id="banner-container-1">
+                <!-- Banner loaded from Firebase -->
+            </div>
+
+            <!-- Categories Section -->
+            <div class="categories-section">
+                <h2 class="section-title">Categories</h2>
+                <div class="categories-grid" id="categories-container">
+                    <!-- Categories loaded from Firebase -->
+                </div>
+            </div>
+
+            <!-- Banner Section 2 -->
+            <div class="banner-container" id="banner-container-2">
+                <!-- Banner loaded from Firebase -->
+            </div>
+
+            <!-- All Products Button -->
+            <div class="all-products-btn" id="all-products-btn">
+                <i class="fas fa-boxes"></i> View All Products
+            </div>
+
+            <!-- Products Grid -->
+            <h2 class="section-title">Featured Products</h2>
+            <div id="product-grid" class="product-grid">
+                <!-- Products loaded from Firebase -->
+            </div>
+
+            <!-- Banner Section 3 -->
+            <div class="banner-container" id="banner-container-3">
+                <!-- Banner loaded from Firebase -->
+            </div>
+        </section>
+
+        <!-- Categories Page -->
+        <section id="categories-page" class="page">
+            <div class="page-content">
+                <h1>All Categories</h1>
+                <div class="categories-grid" id="all-categories-container">
+                    <!-- Categories loaded from Firebase -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Page -->
+        <section id="search" class="page">
+            <div class="page-content">
+                <h1>Search Products</h1>
+                <input type="text" id="search-input" placeholder="Search for products, suppliers, categories..." style="margin: 0 15px 15px; width: calc(100% - 30px);">
+                <div id="search-results-grid" class="product-grid"></div>
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profile" class="page">
+            <div class="page-content">
+                <h1>My Profile</h1>
+                <div style="padding: 0 15px;">
+                    <div class="profile-info" style="background: var(--card-bg); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--box-shadow);">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div id="user-avatar" style="width: 80px; height: 80px; background: var(--primary-color); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div id="user-info">
+                            <p><strong>Name:</strong> <span id="user-name">Guest User</span></p>
+                            <p><strong>Email:</strong> <span id="user-email">Please login</span></p>
+                            <p><strong>Phone:</strong> <span id="user-phone">Not set</span></p>
+                            <p><strong>Address:</strong> <span id="user-address">Not set</span></p>
+                        </div>
+                        <button class="btn google-login-btn" id="google-login-btn">
+                            <i class="fab fa-google"></i> Login with Google
+                        </button>
+                        <button class="btn btn-danger" style="margin-top: 10px; width: 100%; display: none;" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Page -->
+        <section id="settings" class="page">
+            <div class="page-content">
+                <h1>App Settings</h1>
+                <div class="settings-section">
+                    <h3>Contact Information</h3>
+                    <div class="contact-info">
+                        <div class="contact-card">
+                            <i class="fas fa-phone" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                            <h4>Customer Care</h4>
+                            <p>+91 8329323516</p>
+                        </div>
+                        <div class="contact-card">
+                            <i class="fas fa-envelope" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                            <h4>Email Support</h4>
+                            <p>support@navgrah.com</p>
+                        </div>
+                        <div class="contact-card">
+                            <i class="fas fa-clock" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                            <h4>Business Hours</h4>
+                            <p>9:00 AM - 8:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Website Settings</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
+                        <span>Dark Mode</span>
+                        <button class="btn btn-small" id="toggle-dark-mode">Toggle</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
+                        <span>Notifications</span>
+                        <button class="btn btn-small" id="toggle-notifications">Enable</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
+                        <span>Language</span>
+                        <select style="width: auto; margin: 0;">
+                            <option>English</option>
+                            <option>Hindi</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Panel Page -->
+        <section id="admin-panel" class="page">
+            <div class="page-content">
+                <h1>Admin Panel - Users Management</h1>
+                <div class="settings-section">
+                    <h3>Registered Users</h3>
+                    <table class="users-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 20px;">Loading users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Company Page -->
+        <section id="about-company" class="page">
+            <div class="page-content">
+                <h1>About Navgrah Agarbatti</h1>
+                <div class="settings-section">
+                    <h3>Our Story</h3>
+                    <p>Navgrah Agarbatti is a premium incense brand established in 2010 with a rich heritage of creating authentic, high-quality agarbattis. For over 15 years, we have been dedicated to preserving traditional Indian fragrance-making techniques while incorporating modern innovations.</p>
+                    
+                    <h3 style="margin-top: 20px;">Our Mission</h3>
+                    <p>To bring the divine essence of traditional Indian fragrances to every household, creating an atmosphere of peace, spirituality, and positivity through our premium quality agarbattis.</p>
+                    
+                    <h3 style="margin-top: 20px;">Why Choose Us?</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>100% Natural Ingredients</li>
+                        <li>Traditional Handcrafted Methods</li>
+                        <li>Wide Range of Fragrances</li>
+                        <li>Eco-friendly Packaging</li>
+                        <li>Affordable Premium Quality</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 20px;">Contact Information</h3>
+                    <div class="contact-info">
+                        <div class="contact-card">
+                            <i class="fas fa-map-marker-alt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                            <h4>Head Office</h4>
+                            <p>123 Agarbatti Street, nagpur, India</p>
+                        </div>
+                        <div class="contact-card">
+                            <i class="fas fa-industry" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                            <h4>Factory</h4>
+                            <p>456 Manufacturing Zone, Nagpur, India</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-hash="home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-hash="categories-page">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </button>
+        <button class="nav-item" data-hash="search">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </button>
+        <button class="nav-item" data-hash="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </button>
+    </nav>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="product-detail-container" id="product-detail-content">
+                <!-- Product details loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="auth-modal-title">Login to Navgrah</h2>
+            <div style="text-align: center; margin: 20px 0;">
+                <button class="btn google-login-btn" id="modal-google-login">
+                    <i class="fab fa-google" style="color: #DB4437;"></i>
+                    Login with Google
+                </button>
+            </div>
+            <form id="auth-form">
+                <div id="auth-tabs" style="display: flex; margin-bottom: 20px;">
+                    <button type="button" class="btn btn-small active" id="login-tab" style="flex: 1; margin-right: 5px;">Login</button>
+                    <button type="button" class="btn btn-small" id="register-tab" style="flex: 1; margin-left: 5px;">Register</button>
+                </div>
+                
+                <div id="login-form">
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit" class="btn btn-accent">Login</button>
+                </div>
+                
+                <div id="register-form" style="display: none;">
+                    <input type="text" id="register-name" placeholder="Full Name" required>
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <input type="password" id="register-password" placeholder="Password" required>
+                    <input type="tel" id="register-phone" placeholder="Phone Number">
+                    <textarea id="register-address" placeholder="Address"></textarea>
+                    <button type="submit" class="btn btn-accent">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="edit-profile-form">
+                <input type="text" id="edit-name" placeholder="Full Name" required>
+                <input type="email" id="edit-email" placeholder="Email" required>
+                <input type="tel" id="edit-phone" placeholder="Phone Number">
+                <textarea id="edit-address" placeholder="Address"></textarea>
+                <button type="submit" class="btn btn-accent">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration - REPLACE WITH YOUR CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPmdDXCtn-_xq7H4v9fxYoT3YR8ZD6PjI",
+    authDomain: "agarbattimart-32d90.firebaseapp.com",
+    databaseURL: "https://agarbattimart-32d90-default-rtdb.firebaseio.com",
+    projectId: "agarbattimart-32d90",
+    storageBucket: "agarbattimart-32d90.firebasestorage.app",
+    messagingSenderId: "995136626593",
+    appId: "1:995136626593:web:55a782bb190bbab689f5e0",
+    measurementId: "G-S9PNVL4NBT"
+};
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const firestore = firebase.firestore();
+        
+        // Set up Google Auth Provider
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('email');
+        provider.addScope('profile');
+
+        // Global State
+        let state = {
+            user: null,
+            categories: [],
+            products: [],
+            selectedCategory: 'all',
+            currentProduct: null,
+            chatHistory: [],
+            showAllProducts: false,
+            currentImageIndex: 0
+        };
+
+        // Firebase Authentication Functions
+        async function signInWithGoogle() {
+            try {
+                showLoading();
+                const result = await firebase.auth().signInWithPopup(provider);
+                const user = result.user;
+                
+                // Save user data to Firestore
+                await saveUserToFirestore(user);
+                
+                hideLoading();
+                showToast('Successfully logged in with Google!', 'success');
+                closeModal('auth-modal');
+            } catch (error) {
+                hideLoading();
+                console.error('Google login error:', error);
+                showToast('Login failed: ' + error.message, 'error');
+            }
+        }
+
+        async function saveUserToFirestore(user) {
+            try {
+                const userRef = firestore.collection("users").doc(user.uid);
+                const userDoc = await userRef.get();
+                
+                if (!userDoc.exists) {
+                    // User doesn't exist, create new document
+                    await userRef.set({
+                        uid: user.uid,
+                        displayName: user.displayName,
+                        email: user.email,
+                        photoURL: user.photoURL,
+                        phoneNumber: user.phoneNumber || '',
+                        provider: 'google',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } else {
+                    // User exists, update last login
+                    await userRef.update({
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            } catch (error) {
+                console.error('Error saving user to Firestore:', error);
+            }
+        }
+
+        async function signOutUser() {
+            try {
+                await auth.signOut();
+                showToast('Successfully logged out!', 'success');
+            } catch (error) {
+                console.error('Logout error:', error);
+                showToast('Logout failed: ' + error.message, 'error');
+            }
+        }
+
+        async function loadUsersFromFirestore() {
+            try {
+                const querySnapshot = await firestore.collection("users").get();
+                const usersTableBody = document.getElementById('users-table-body');
+                usersTableBody.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">No users found</td></tr>';
+                    return;
+                }
+                
+                querySnapshot.forEach((doc) => {
+                    const user = doc.data();
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>
+                            ${user.photoURL ? 
+                                `<img src="${user.photoURL}" alt="${user.displayName}" class="user-avatar">` : 
+                                `<div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-user"></i>
+                                </div>`
+                            }
+                        </td>
+                        <td>${user.displayName || 'N/A'}</td>
+                        <td>${user.email || 'N/A'}</td>
+                        <td>${user.phoneNumber || 'N/A'}</td>
+                        <td>${user.createdAt ? new Date(user.createdAt.toDate()).toLocaleDateString() : 'N/A'}</td>
+                    `;
+                    
+                    usersTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading users:', error);
+                document.getElementById('users-table-body').innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--danger-color);">Error loading users</td></tr>';
+            }
+        }
+
+        // Auth state listener for auto-login
+        function setupAuthListener() {
+            auth.onAuthStateChanged((user) => {
+                const googleLoginBtn = document.getElementById('google-login-btn');
+                const logoutBtn = document.getElementById('logout-btn');
+                const userAvatar = document.getElementById('user-avatar');
+                const userName = document.getElementById('user-name');
+                const userEmail = document.getElementById('user-email');
+                const loginStatusIndicator = document.getElementById('login-status-indicator');
+                const authBtn = document.getElementById('auth-btn');
+                
+                if (user) {
+                    // User is signed in
+                    googleLoginBtn.style.display = 'none';
+                    logoutBtn.style.display = 'block';
+                    loginStatusIndicator.classList.add('active');
+                    authBtn.innerHTML = '<i class="fas fa-user"></i> ' + (user.displayName || 'User');
+                    
+                    // Update user profile
+                    if (user.photoURL) {
+                        userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    } else {
+                        userAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                    }
+                    userName.textContent = user.displayName || 'User';
+                    userEmail.textContent = user.email;
+                    
+                    // Load users data for admin panel
+                    loadUsersFromFirestore();
+                } else {
+                    // User is signed out
+                    googleLoginBtn.style.display = 'block';
+                    logoutBtn.style.display = 'none';
+                    loginStatusIndicator.classList.remove('active');
+                    authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
+                    
+                    // Reset user profile
+                    userAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                    userName.textContent = 'Guest User';
+                    userEmail.textContent = 'Please login';
+                    document.getElementById('user-phone').textContent = 'Not set';
+                    document.getElementById('user-address').textContent = 'Not set';
+                }
+            });
+        }
+
+        // Utility Functions
+        function showLoading() {
+            document.getElementById('loading-spinner').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-spinner').classList.remove('active');
+        }
+
+        function showToast(message, type = 'info', duration = 3000) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toastContainer.removeChild(toast), 300);
+            }, duration);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function closeSideMenu() {
+            document.getElementById('side-menu').classList.remove('active');
+        }
+
+        // Contact functions
+        function contactViaWhatsApp(productName = 'Navgrah Agarbatti') {
+            const phoneNumber = '918329323516';
+            const message = `Hello, I'm interested in ${productName}. Can you provide more details?`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function contactViaCall() {
+            const phoneNumber = '+918329323516';
+            window.location.href = `tel:${phoneNumber}`;
+        }
+
+        function contactViaMessage(productName = 'Navgrah Agarbatti') {
+            const phoneNumber = '918329323516';
+            const message = `I'm interested in ${productName}. Please send me more information.`;
+            window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+        }
+
+        // Chat Bot Responses
+        const chatBotResponses = {
+            'hello': 'Hello! Welcome to Navgrah Agarbatti. How can I assist you today?',
+            'hi': 'Hi there! I\'m here to help you with our premium agarbatti products.',
+            'product': 'We offer a wide range of premium agarbattis including Masala Agarbatti, Floral Agarbatti, Herbal Agarbatti, Sandalwood, Dhoop, and Cones. Which type are you interested in?',
+            'price': 'Our agarbattis start from ₹50 and go up to ₹500 depending on the pack size and fragrance. Would you like to know about specific products?',
+            'order': 'To place an order, you can contact us directly via WhatsApp, call, or message using the contact options in the app.',
+            'delivery': 'We deliver across India. Delivery time is 3-7 business days depending on your location.',
+            'quality': 'All Navgrah agarbattis are made with 100% natural ingredients and traditional methods for the best quality and fragrance.',
+            'contact': 'You can reach us at +91 8329323516 or email navgrah agarbatti@gmail.com. We\'re available 9 AM - 7 PM.',
+            'thanks': 'You\'re welcome! Let me know if you need any other assistance.',
+            'help': 'I can help you with product information, pricing, orders, delivery, and general queries about Navgrah agarbattis.'
+        };
+
+        // Data Loading Functions
+        function loadCategories() {
+            database.ref('categories').on('value', (snapshot) => {
+                state.categories = [];
+                snapshot.forEach((childSnapshot) => {
+                    state.categories.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                renderCategories();
+                renderAllCategories();
+            });
+        }
+
+        function loadProducts() {
+            database.ref('products').on('value', (snapshot) => {
+                state.products = [];
+                snapshot.forEach((childSnapshot) => {
+                    state.products.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                renderProducts();
+            });
+        }
+
+        function loadBanners() {
+            database.ref('banners').on('value', (snapshot) => {
+                const banners = [];
+                snapshot.forEach((childSnapshot) => {
+                    const banner = childSnapshot.val();
+                    banner.id = childSnapshot.key;
+                    banners.push(banner);
+                });
+                renderBanners(banners);
+            });
+        }
+
+        // Render banners in the three banner containers
+        function renderBanners(banners) {
+            // Clear existing banners
+            const bannerContainer1 = document.getElementById('banner-container-1');
+            const bannerContainer2 = document.getElementById('banner-container-2');
+            const bannerContainer3 = document.getElementById('banner-container-3');
+            
+            bannerContainer1.innerHTML = '';
+            bannerContainer2.innerHTML = '';
+            bannerContainer3.innerHTML = '';
+
+            // If no banners, show default banners
+            if (banners.length === 0) {
+                bannerContainer1.innerHTML = `
+                    <img class="banner" src="https://via.placeholder.com/300x150/2E7D32/ffffff?text=Navgrah+Agarbatti" alt="Welcome Banner">
+                `;
+                bannerContainer2.innerHTML = `
+                    <img class="banner" src="https://via.placeholder.com/300x150/8B4513/ffffff?text=Premium+Quality" alt="Premium Quality">
+                `;
+                bannerContainer3.innerHTML = `
+                    <img class="banner" src="https://via.placeholder.com/300x150/D2691E/ffffff?text=Shop+Now" alt="Shop Now">
+                `;
+                return;
+            }
+
+            // Simple distribution - first banner in position 1, second in position 2, etc.
+            banners.forEach((banner, index) => {
+                const bannerElement = createBannerElement(banner);
+                
+                if (index === 0) {
+                    bannerContainer1.appendChild(bannerElement);
+                } else if (index === 1) {
+                    bannerContainer2.appendChild(bannerElement);
+                } else if (index === 2) {
+                    bannerContainer3.appendChild(bannerElement);
+                } else {
+                    // If more than 3 banners, add to first container
+                    bannerContainer1.appendChild(bannerElement);
+                }
+            });
+        }
+
+        // Create banner element
+        function createBannerElement(banner) {
+            const bannerElement = document.createElement('img');
+            bannerElement.className = 'banner';
+            bannerElement.src = banner.imageUrl || 'https://via.placeholder.com/300x150?text=Navgrah+Banner';
+            bannerElement.alt = banner.title || 'Banner';
+            bannerElement.onerror = function() {
+                this.src = 'https://via.placeholder.com/300x150/666666/FFFFFF?text=Banner+Image';
+            };
+            
+            // Add click event if banner has a link
+            if (banner.link && banner.link !== '#') {
+                bannerElement.style.cursor = 'pointer';
+                bannerElement.addEventListener('click', function() {
+                    window.open(banner.link, '_blank');
+                });
+            }
+            
+            return bannerElement;
+        }
+
+        // Render Functions
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = '';
+            
+            state.categories.slice(0, 6).forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = `category-card ${state.selectedCategory === category.id ? 'active' : ''}`;
+                categoryCard.setAttribute('data-category', category.id);
+                
+                categoryCard.innerHTML = `
+                    <i class="${category.icon || 'fas fa-fire'}"></i>
+                    <h3>${category.name}</h3>
+                `;
+                
+                categoryCard.addEventListener('click', () => {
+                    document.querySelectorAll('.category-card').forEach(card => {
+                        card.classList.remove('active');
+                    });
+                    categoryCard.classList.add('active');
+                    state.selectedCategory = category.id;
+                    state.showAllProducts = false;
+                    renderProducts();
+                });
+                
+                container.appendChild(categoryCard);
+            });
+        }
+
+        function renderAllCategories() {
+            const container = document.getElementById('all-categories-container');
+            container.innerHTML = '';
+            
+            state.categories.forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = `category-card ${state.selectedCategory === category.id ? 'active' : ''}`;
+                categoryCard.setAttribute('data-category', category.id);
+                
+                categoryCard.innerHTML = `
+                    <i class="${category.icon || 'fas fa-fire'}"></i>
+                    <h3>${category.name}</h3>
+                `;
+                
+                categoryCard.addEventListener('click', () => {
+                    state.selectedCategory = category.id;
+                    state.showAllProducts = false;
+                    navigateToPage('home');
+                    renderProducts();
+                });
+                
+                container.appendChild(categoryCard);
+            });
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('product-grid');
+            container.innerHTML = '';
+            
+            let filteredProducts = state.products;
+            
+            if (!state.showAllProducts && state.selectedCategory !== 'all') {
+                filteredProducts = state.products.filter(product => product.category === state.selectedCategory);
+            }
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-box-open"></i>
+                        <h3>No Products Found</h3>
+                        <p>Try selecting a different category</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredProducts.forEach(product => {
+                const productCard = createProductCard(product);
+                container.appendChild(productCard);
+            });
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            let badgeHTML = '';
+            if (product.isNew) {
+                badgeHTML = '<div class="product-badge" style="background: var(--success-color);">NEW</div>';
+            } else if (product.discount > 15) {
+                badgeHTML = `<div class="product-badge">${product.discount}% OFF</div>`;
+            }
+            
+            card.innerHTML = `
+                ${badgeHTML}
+                <img src="${product.imageUrl || 'https://via.placeholder.com/300x300/2E7D32/ffffff?text=Navgrah'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300/2E7D32/ffffff?text=Navgrah'">
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            ${'★'.repeat(Math.floor(product.rating || 4))}${'☆'.repeat(5 - Math.floor(product.rating || 4))}
+                        </div>
+                        <span class="rating-count">(${product.reviews || 0} reviews)</span>
+                    </div>
+                    <div class="price">
+                        ₹${product.price}
+                        ${product.originalPrice ? `<span class="original-price">₹${product.originalPrice}</span>` : ''}
+                    </div>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">${product.packSize || 'Standard Pack'} • ${product.burnTime || '45 mins'}</p>
+                </div>
+                <div class="product-actions">
+                    <button class="view-details-btn" data-product-id="${product.id}">
+                        <i class="fas fa-eye"></i> View Details
+                    </button>
+                </div>
+            `;
+            
+            card.querySelector('.view-details-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                showProductDetail(product);
+            });
+            
+            card.addEventListener('click', () => {
+                showProductDetail(product);
+            });
+            
+            return card;
+        }
+
+        // Show product detail with multiple images
+        function showProductDetail(product) {
+            state.currentProduct = product;
+            state.currentImageIndex = 0;
+            
+            const modal = document.getElementById('product-detail-modal');
+            const content = document.getElementById('product-detail-content');
+            
+            // Get all product images
+            const allImages = [product.imageUrl, ...(product.additionalImages || [])].filter(img => img);
+            
+            content.innerHTML = `
+                <div class="product-image-section">
+                    <img class="main-product-image" src="${allImages[0] || 'https://via.placeholder.com/300x300/2E7D32/ffffff?text=Navgrah'}" alt="${product.name}" id="main-product-image">
+                    
+                    ${allImages.length > 1 ? `
+                        <div class="image-navigation">
+                            <button class="nav-btn prev-btn" id="prev-image">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="nav-btn next-btn" id="next-image">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                    
+                    ${allImages.length > 1 ? `
+                        <div class="thumbnail-container" id="thumbnail-container">
+                            ${allImages.map((img, index) => `
+                                <img src="${img}" alt="Thumbnail ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="product-detail-info">
+                    <h2>${product.name}</h2>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            ${'★'.repeat(Math.floor(product.rating || 4))}${'☆'.repeat(5 - Math.floor(product.rating || 4))}
+                        </div>
+                        <span class="rating-count">${product.rating || 4} (${product.reviews || 0} reviews)</span>
+                    </div>
+                    <div class="product-detail-price">
+                        ₹${product.price}
+                        ${product.originalPrice ? `<span class="original-price">₹${product.originalPrice}</span>` : ''}
+                    </div>
+                    <p class="product-detail-description">${product.description || 'Premium quality Navgrah agarbatti with authentic fragrance.'}</p>
+                    
+                    <div class="product-detail-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Burn Time</span>
+                            <span class="meta-value">${product.burnTime || '45 mins'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Fragrance</span>
+                            <span class="meta-value">${product.fragranceType || 'Traditional'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Pack Size</span>
+                            <span class="meta-value">${product.packSize || 'Standard Pack'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-options">
+                        <div class="contact-option whatsapp" onclick="contactViaWhatsApp('${product.name}')">
+                            <i class="fab fa-whatsapp"></i>
+                            <div class="contact-text">
+                                <h4>WhatsApp</h4>
+                                <p>Contact us on WhatsApp</p>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        
+                        <div class="contact-option call" onclick="contactViaCall()">
+                            <i class="fas fa-phone"></i>
+                            <div class="contact-text">
+                                <h4>Call Us</h4>
+                                <p>Speak directly with our team</p>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        
+                        <div class="contact-option message" onclick="contactViaMessage('${product.name}')">
+                            <i class="fas fa-sms"></i>
+                            <div class="contact-text">
+                                <h4>Send Message</h4>
+                                <p>Text us for more information</p>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Setup image navigation if multiple images exist
+            if (allImages.length > 1) {
+                setupImageNavigation(allImages);
+            }
+            
+            modal.classList.add('active');
+        }
+
+        // Setup image navigation for product detail
+        function setupImageNavigation(allImages) {
+            const mainImage = document.getElementById('main-product-image');
+            const prevBtn = document.getElementById('prev-image');
+            const nextBtn = document.getElementById('next-image');
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            
+            function updateImage(index) {
+                state.currentImageIndex = index;
+                mainImage.src = allImages[index];
+                
+                // Update active thumbnail
+                thumbnails.forEach((thumb, i) => {
+                    thumb.classList.toggle('active', i === index);
+                });
+            }
+            
+            // Previous button click
+            prevBtn.addEventListener('click', () => {
+                let newIndex = state.currentImageIndex - 1;
+                if (newIndex < 0) newIndex = allImages.length - 1;
+                updateImage(newIndex);
+            });
+            
+            // Next button click
+            nextBtn.addEventListener('click', () => {
+                let newIndex = state.currentImageIndex + 1;
+                if (newIndex >= allImages.length) newIndex = 0;
+                updateImage(newIndex);
+            });
+            
+            // Thumbnail click
+            thumbnails.forEach((thumb, index) => {
+                thumb.addEventListener('click', () => {
+                    updateImage(index);
+                });
+            });
+        }
+
+        // Navigation
+        function navigateToPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const navItem = document.querySelector(`.nav-item[data-hash="${pageId}"]`);
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+            
+            window.location.hash = pageId;
+            closeSideMenu();
+        }
+
+        // Chat Bot Functions
+        function setupChatBot() {
+            const chatModal = document.getElementById('chat-modal');
+            const closeChat = document.getElementById('close-chat');
+            const sendBtn = document.getElementById('send-message');
+            const chatInput = document.getElementById('chat-input');
+            const chatMessages = document.getElementById('chat-messages');
+
+            closeChat.addEventListener('click', () => {
+                chatModal.classList.remove('active');
+            });
+
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function getBotResponse(userMessage) {
+                const lowerMessage = userMessage.toLowerCase();
+                
+                for (const [key, response] of Object.entries(chatBotResponses)) {
+                    if (lowerMessage.includes(key)) {
+                        return response;
+                    }
+                }
+
+                // Check for product-related queries
+                if (lowerMessage.includes('masala')) {
+                    return 'Masala Agarbatti is our traditional blend with authentic spices and herbs. Available in packs of 10, 20, and 50 sticks. Price starts from ₹60.';
+                } else if (lowerMessage.includes('floral') || lowerMessage.includes('flower')) {
+                    return 'Floral Agarbatti offers beautiful flower fragrances like Rose, Jasmine, and Lotus. Available in packs of 15, 30, and 60 sticks starting from ₹70.';
+                } else if (lowerMessage.includes('herbal')) {
+                    return 'Herbal Agarbatti is made with natural herbs and Ayurvedic ingredients. Pack sizes: 12, 24, 48 sticks. Starting price: ₹80.';
+                } else if (lowerMessage.includes('sandalwood') || lowerMessage.includes('chandan')) {
+                    return 'Sandalwood agarbatti has a rich, woody fragrance. Available in packs of 10, 20, 40 sticks from ₹90.';
+                } else if (lowerMessage.includes('dhoop')) {
+                    return 'Dhoop sticks provide intense fragrance and longer burn time. Available in packs of 20, 40, 80 sticks from ₹50.';
+                } else if (lowerMessage.includes('cone')) {
+                    return 'Agarbatti cones are perfect for special occasions. Available in packs of 12, 24, 48 cones from ₹40.';
+                }
+
+                return 'I understand you\'re asking about: "' + userMessage + '". For detailed information about our products, please check the product details or contact our customer support.';
+            }
+
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    state.chatHistory.push({ user: message });
+                    chatInput.value = '';
+
+                    // Simulate bot typing
+                    setTimeout(() => {
+                        const response = getBotResponse(message);
+                        addMessage(response);
+                        state.chatHistory.push({ bot: response });
+                    }, 1000);
+                }
+            }
+
+            sendBtn.addEventListener('click', sendMessage);
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Chat bot from side menu
+            document.getElementById('chat-bot-btn').addEventListener('click', () => {
+                chatModal.classList.add('active');
+                closeSideMenu();
+            });
+        }
+
+        // Initialize App
+        function initApp() {
+            showLoading();
+            
+            // Setup Firebase Auth listener
+            setupAuthListener();
+            
+            // Setup Google login buttons
+            document.getElementById('google-login-btn').addEventListener('click', signInWithGoogle);
+            document.getElementById('modal-google-login').addEventListener('click', signInWithGoogle);
+            document.getElementById('logout-btn').addEventListener('click', signOutUser);
+            
+            // Setup chat bot
+            setupChatBot();
+            
+            // Load data
+            loadCategories();
+            loadProducts();
+            loadBanners();
+            
+            // Setup navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const pageId = e.currentTarget.getAttribute('data-hash');
+                    navigateToPage(pageId);
+                });
+            });
+            
+            // All products button
+            document.getElementById('all-products-btn').addEventListener('click', () => {
+                state.showAllProducts = true;
+                state.selectedCategory = 'all';
+                document.querySelectorAll('.category-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                renderProducts();
+                showToast('Showing all products', 'info');
+            });
+            
+            // Setup menu toggle
+            document.getElementById('menu-toggle').addEventListener('click', () => {
+                document.getElementById('side-menu').classList.toggle('active');
+            });
+            
+            // Close side menu when clicking outside
+            document.addEventListener('click', (e) => {
+                const sideMenu = document.getElementById('side-menu');
+                const menuToggle = document.getElementById('menu-toggle');
+                
+                if (sideMenu.classList.contains('active') && 
+                    !sideMenu.contains(e.target) && 
+                    !menuToggle.contains(e.target)) {
+                    closeSideMenu();
+                }
+            });
+            
+            // Setup menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const pageId = item.getAttribute('data-hash');
+                    if (pageId) {
+                        navigateToPage(pageId);
+                    } else if (item.id === 'about-us-btn') {
+                        navigateToPage('about-company');
+                    } else if (item.id === 'website-settings-btn') {
+                        navigateToPage('settings');
+                    }
+                    closeSideMenu();
+                });
+            });
+            
+            // Setup search icon
+            document.querySelector('.search-icon').addEventListener('click', () => {
+                navigateToPage('search');
+            });
+            
+            // Setup search
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const resultsContainer = document.getElementById('search-results-grid');
+                
+                if (query.length < 2) {
+                    resultsContainer.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><p>Start typing to search for products, suppliers, categories...</p></div>';
+                    return;
+                }
+                
+                const filteredProducts = state.products.filter(product => 
+                    product.name.toLowerCase().includes(query) || 
+                    (product.description && product.description.toLowerCase().includes(query))
+                );
+                
+                resultsContainer.innerHTML = '';
+                
+                if (filteredProducts.length === 0) {
+                    resultsContainer.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;"><p>No products found matching your search</p></div>';
+                    return;
+                }
+                
+                filteredProducts.forEach(product => {
+                    const productCard = createProductCard(product);
+                    resultsContainer.appendChild(productCard);
+                });
+            });
+            
+            // Setup modals
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal').classList.remove('active');
+                });
+            });
+            
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Auth button click
+            document.getElementById('auth-btn').addEventListener('click', () => {
+                if (auth.currentUser) {
+                    signOutUser();
+                } else {
+                    document.getElementById('auth-modal').classList.add('active');
+                }
+            });
+            
+            // Auth tabs
+            document.getElementById('login-tab').addEventListener('click', () => {
+                document.getElementById('login-tab').classList.add('active');
+                document.getElementById('register-tab').classList.remove('active');
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('auth-modal-title').textContent = 'Login to Navgrah';
+            });
+
+            document.getElementById('register-tab').addEventListener('click', () => {
+                document.getElementById('register-tab').classList.add('active');
+                document.getElementById('login-tab').classList.remove('active');
+                document.getElementById('register-form').style.display = 'block';
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('auth-modal-title').textContent = 'Register for Navgrah';
+            });
+            
+            // Dark mode toggle
+            document.getElementById('toggle-dark-mode').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+            });
+            
+            // Header dark mode toggle
+            document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+            });
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Hide loading after initialization
+            setTimeout(() => {
+                hideLoading();
+                showToast('Welcome to Navgrah Agarbatti!', 'success');
+            }, 2000);
+        }
+
+        // Start the app
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
