@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -387,12 +387,7 @@
             height: 150px;
             object-fit: cover;
             display: block;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .banner:hover {
-            transform: scale(1.02);
+            /* Removed cursor pointer and transition to disable clicking */
         }
 
         /* Categories Section - New Design */
@@ -507,8 +502,9 @@
         }
         .product-card img {
             width: 100%;
-            height: 200px;
+            height: 280px; /* Increased image size */
             object-fit: cover;
+            /* Removed cursor: zoom-in */
         }
         .product-info { 
             padding: 15px; 
@@ -564,6 +560,126 @@
             font-weight: 500;
         }
 
+        /* NEW: Flipkart Style Image Slider */
+        .image-slider {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 500px; /* Increased height */
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            /* Removed cursor: zoom-in */
+        }
+
+        /* Navigation Arrows */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 15px;
+            z-index: 10;
+        }
+
+        .nav-arrow {
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav-arrow:hover {
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Dots Indicator */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: #2874f0;
+        }
+
+        /* Thumbnail Images */
+        .thumbnails {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.3s;
+            flex-shrink: 0;
+        }
+
+        .thumbnail.active {
+            border-color: #2874f0;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* Product Detail Modal */
         #product-detail-modal .modal-content {
             max-width: 95%;
@@ -580,68 +696,7 @@
         .product-image-section {
             position: relative;
             width: 100%;
-        }
-        
-        .main-product-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .image-navigation {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 10px;
-            transform: translateY(-50%);
-        }
-        
-        .nav-btn {
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: var(--transition);
-        }
-        
-        .nav-btn:hover {
-            background: rgba(0,0,0,0.8);
-        }
-        
-        .thumbnail-container {
-            display: flex;
-            gap: 10px;
-            padding: 10px;
-            background: var(--light-bg);
-            overflow-x: auto;
-        }
-        
-        .thumbnail {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 6px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: var(--transition);
-        }
-        
-        .thumbnail.active {
-            border-color: var(--primary-color);
-        }
-        
-        .thumbnail:hover {
-            transform: scale(1.1);
+            padding: 20px;
         }
         
         .product-detail-info {
@@ -745,6 +800,117 @@
         .contact-option .contact-text p {
             font-size: 0.8rem;
             color: #666;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .add-review-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .reviews-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .review-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+        }
+
+        .review-date {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .review-rating {
+            color: var(--warning-color);
+            margin-bottom: 8px;
+        }
+
+        .review-text {
+            line-height: 1.5;
+        }
+
+        .no-reviews {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        /* Review Form */
+        .review-form {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+        }
+
+        .rating-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .rating-input label {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star-rating i {
+            font-size: 1.5rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-rating i.active {
+            color: var(--warning-color);
+        }
+
+        .review-form textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
         }
 
         /* Page Content Styles */
@@ -919,8 +1085,8 @@
             .product-image-section {
                 width: 50%;
             }
-            .main-product-image {
-                height: 400px;
+            .slider-container {
+                height: 550px; /* Increased height */
             }
             .product-detail-info {
                 width: 50%;
@@ -954,6 +1120,13 @@
                 display: block;
                 overflow-x: auto;
             }
+            .slider-container {
+                height: 400px; /* Adjusted for mobile */
+            }
+            .nav-arrow {
+                width: 36px;
+                height: 36px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -970,6 +1143,16 @@
             .chat-modal {
                 width: 280px;
                 right: 10px;
+            }
+            .slider-container {
+                height: 350px; /* Adjusted for small mobile */
+            }
+            .thumbnails {
+                gap: 6px;
+            }
+            .thumbnail {
+                width: 60px;
+                height: 60px;
             }
         }
     </style>
@@ -1264,7 +1447,7 @@
                         <div class="contact-card">
                             <i class="fas fa-map-marker-alt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
                             <h4>Head Office</h4>
-                            <p>123 Agarbatti Street, nagpur, India</p>
+                            <p>123 Agarbatti Street, Nagpur, India</p>
                         </div>
                         <div class="contact-card">
                             <i class="fas fa-industry" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
@@ -1300,7 +1483,7 @@
     <!-- Toast Notifications -->
     <div id="toast-container"></div>
 
-    <!-- Product Detail Modal -->
+    <!-- Product Detail Modal with NEW Image Slider -->
     <div id="product-detail-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -1361,17 +1544,17 @@
     </div>
 
     <script>
-        // Firebase Configuration - REPLACE WITH YOUR CONFIG
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBPmdDXCtn-_xq7H4v9fxYoT3YR8ZD6PjI",
-    authDomain: "agarbattimart-32d90.firebaseapp.com",
-    databaseURL: "https://agarbattimart-32d90-default-rtdb.firebaseio.com",
-    projectId: "agarbattimart-32d90",
-    storageBucket: "agarbattimart-32d90.firebasestorage.app",
-    messagingSenderId: "995136626593",
-    appId: "1:995136626593:web:55a782bb190bbab689f5e0",
-    measurementId: "G-S9PNVL4NBT"
-};
+            authDomain: "agarbattimart-32d90.firebaseapp.com",
+            databaseURL: "https://agarbattimart-32d90-default-rtdb.firebaseio.com",
+            projectId: "agarbattimart-32d90",
+            storageBucket: "agarbattimart-32d90.firebasestorage.app",
+            messagingSenderId: "995136626593",
+            appId: "1:995136626593:web:55a782bb190bbab689f5e0",
+            measurementId: "G-S9PNVL4NBT"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -1393,8 +1576,348 @@
             currentProduct: null,
             chatHistory: [],
             showAllProducts: false,
-            currentImageIndex: 0
+            currentImageIndex: 0,
+            reviews: {}
         };
+
+        // NEW: Reviews System
+        function loadReviews(productId) {
+            return new Promise((resolve) => {
+                database.ref('reviews/' + productId).on('value', (snapshot) => {
+                    const reviews = [];
+                    snapshot.forEach((childSnapshot) => {
+                        reviews.push({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
+                    });
+                    state.reviews[productId] = reviews;
+                    resolve(reviews);
+                }, (error) => {
+                    console.error('Error loading reviews:', error);
+                    resolve([]);
+                });
+            });
+        }
+
+        function saveReview(productId, reviewData) {
+            return new Promise((resolve, reject) => {
+                const user = auth.currentUser;
+                if (!user) {
+                    reject(new Error('User must be logged in to submit a review'));
+                    return;
+                }
+                
+                const reviewRef = database.ref('reviews/' + productId).push();
+                reviewData.userId = user.uid;
+                reviewData.userName = user.displayName || 'Anonymous';
+                reviewData.userEmail = user.email;
+                reviewData.timestamp = firebase.database.ServerValue.TIMESTAMP;
+                
+                reviewRef.set(reviewData)
+                    .then(() => {
+                        resolve();
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            });
+        }
+
+        function renderReviews(productId) {
+            const reviews = state.reviews[productId] || [];
+            let reviewsHTML = '';
+            
+            if (reviews.length === 0) {
+                reviewsHTML = `
+                    <div class="no-reviews">
+                        <i class="fas fa-comment-slash"></i>
+                        <p>No reviews yet. Be the first to review this product!</p>
+                    </div>
+                `;
+            } else {
+                reviewsHTML = reviews.map(review => `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="reviewer-name">${review.userName}</span>
+                            <span class="review-date">${new Date(review.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <div class="review-rating">
+                            ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+                        </div>
+                        <div class="review-text">${review.comment}</div>
+                    </div>
+                `).join('');
+            }
+            
+            return `
+                <div class="reviews-section">
+                    <div class="reviews-header">
+                        <h3>Customer Reviews (${reviews.length})</h3>
+                        <button class="add-review-btn" id="add-review-btn">
+                            <i class="fas fa-plus"></i> Add Review
+                        </button>
+                    </div>
+                    <div class="reviews-list">
+                        ${reviewsHTML}
+                    </div>
+                    <div class="review-form" id="review-form" style="display: none;">
+                        <h4>Write a Review</h4>
+                        <div class="rating-input">
+                            <label>Rating:</label>
+                            <div class="star-rating" id="star-rating">
+                                <i class="fas fa-star" data-rating="1"></i>
+                                <i class="fas fa-star" data-rating="2"></i>
+                                <i class="fas fa-star" data-rating="3"></i>
+                                <i class="fas fa-star" data-rating="4"></i>
+                                <i class="fas fa-star" data-rating="5"></i>
+                            </div>
+                        </div>
+                        <textarea id="review-comment" placeholder="Share your experience with this product..." required></textarea>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-small" id="cancel-review">Cancel</button>
+                            <button type="button" class="btn btn-small btn-accent" id="submit-review">Submit Review</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupReviewForm(productId) {
+            const addReviewBtn = document.getElementById('add-review-btn');
+            const reviewForm = document.getElementById('review-form');
+            const cancelReviewBtn = document.getElementById('cancel-review');
+            const submitReviewBtn = document.getElementById('submit-review');
+            const starRating = document.getElementById('star-rating');
+            const stars = starRating.querySelectorAll('i');
+            let selectedRating = 0;
+            
+            // Star rating selection
+            stars.forEach(star => {
+                star.addEventListener('mouseover', () => {
+                    const rating = parseInt(star.getAttribute('data-rating'));
+                    highlightStars(rating);
+                });
+                
+                star.addEventListener('mouseout', () => {
+                    highlightStars(selectedRating);
+                });
+                
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.getAttribute('data-rating'));
+                    highlightStars(selectedRating);
+                });
+            });
+            
+            function highlightStars(rating) {
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('active');
+                    } else {
+                        star.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Show/hide review form
+            addReviewBtn.addEventListener('click', () => {
+                if (!auth.currentUser) {
+                    showToast('Please login to submit a review', 'warning');
+                    document.getElementById('auth-modal').classList.add('active');
+                    return;
+                }
+                
+                reviewForm.style.display = 'block';
+                addReviewBtn.style.display = 'none';
+                selectedRating = 0;
+                highlightStars(0);
+                document.getElementById('review-comment').value = '';
+            });
+            
+            cancelReviewBtn.addEventListener('click', () => {
+                reviewForm.style.display = 'none';
+                addReviewBtn.style.display = 'block';
+            });
+            
+            // Submit review
+            submitReviewBtn.addEventListener('click', () => {
+                const comment = document.getElementById('review-comment').value.trim();
+                
+                if (selectedRating === 0) {
+                    showToast('Please select a rating', 'warning');
+                    return;
+                }
+                
+                if (comment === '') {
+                    showToast('Please write a review comment', 'warning');
+                    return;
+                }
+                
+                saveReview(productId, {
+                    rating: selectedRating,
+                    comment: comment
+                }).then(() => {
+                    showToast('Review submitted successfully!', 'success');
+                    reviewForm.style.display = 'none';
+                    addReviewBtn.style.display = 'block';
+                    
+                    // Reload reviews
+                    loadReviews(productId).then(() => {
+                        // Re-render the reviews section
+                        const reviewsSection = document.querySelector('.reviews-section');
+                        if (reviewsSection) {
+                            reviewsSection.outerHTML = renderReviews(productId);
+                            setupReviewForm(productId);
+                        }
+                    });
+                }).catch(error => {
+                    showToast('Error submitting review: ' + error.message, 'error');
+                });
+            });
+        }
+
+        // NEW: Image Slider Functions
+        function initImageSlider(images, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="image-slider">
+                    <div class="slider-container" id="${containerId}-slider">
+                        ${images.map((img, index) => `
+                            <div class="slide">
+                                <img src="${img}" alt="Product Image ${index + 1}">
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="slider-nav">
+                        <button class="nav-arrow prev-arrow" onclick="prevSlide('${containerId}')">&#10094;</button>
+                        <button class="nav-arrow next-arrow" onclick="nextSlide('${containerId}')">&#10095;</button>
+                    </div>
+                </div>
+                
+                <div class="dots-container" id="${containerId}-dots">
+                    ${images.map((_, index) => `
+                        <div class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide('${containerId}', ${index})"></div>
+                    `).join('')}
+                </div>
+                
+                <div class="thumbnails" id="${containerId}-thumbnails">
+                    ${images.map((img, index) => `
+                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="goToSlide('${containerId}', ${index})">
+                            <img src="${img}" alt="Thumbnail ${index + 1}">
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Initialize slider state
+            if (!window.sliderState) window.sliderState = {};
+            window.sliderState[containerId] = {
+                currentSlide: 0,
+                totalSlides: images.length
+            };
+
+            // Add touch events for mobile
+            setupTouchEvents(`${containerId}-slider`, containerId);
+        }
+
+        function goToSlide(containerId, slideIndex) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            state.currentSlide = slideIndex;
+            updateSliderPosition(containerId);
+            updateIndicators(containerId);
+        }
+
+        function nextSlide(containerId) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            state.currentSlide = (state.currentSlide + 1) % state.totalSlides;
+            updateSliderPosition(containerId);
+            updateIndicators(containerId);
+        }
+
+        function prevSlide(containerId) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            state.currentSlide = (state.currentSlide - 1 + state.totalSlides) % state.totalSlides;
+            updateSliderPosition(containerId);
+            updateIndicators(containerId);
+        }
+
+        function updateSliderPosition(containerId) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            const slider = document.getElementById(`${containerId}-slider`);
+            if (slider) {
+                slider.style.transform = `translateX(-${state.currentSlide * 100}%)`;
+            }
+        }
+
+        function updateIndicators(containerId) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            // Update dots
+            const dots = document.querySelectorAll(`#${containerId}-dots .dot`);
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === state.currentSlide);
+            });
+
+            // Update thumbnails
+            const thumbnails = document.querySelectorAll(`#${containerId}-thumbnails .thumbnail`);
+            thumbnails.forEach((thumbnail, index) => {
+                thumbnail.classList.toggle('active', index === state.currentSlide);
+            });
+        }
+
+        function setupTouchEvents(sliderId, containerId) {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
+
+            let startX = 0;
+            let endX = 0;
+
+            slider.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+
+            slider.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe(containerId);
+            });
+
+            function handleSwipe(containerId) {
+                const swipeThreshold = 50;
+                
+                if (startX - endX > swipeThreshold) {
+                    // Swipe Left - Next Slide
+                    nextSlide(containerId);
+                } else if (endX - startX > swipeThreshold) {
+                    // Swipe Right - Previous Slide
+                    prevSlide(containerId);
+                }
+            }
+        }
+
+        // Messages Saving Function
+        function saveMessageToDatabase(messageData, type = 'whatsapp') {
+            const messageRef = database.ref('messages/' + type).push();
+            messageData.timestamp = firebase.database.ServerValue.TIMESTAMP;
+            messageRef.set(messageData)
+                .then(() => {
+                    console.log('Message saved successfully to database');
+                })
+                .catch((error) => {
+                    console.error('Error saving message:', error);
+                });
+        }
 
         // Firebase Authentication Functions
         async function signInWithGoogle() {
@@ -1569,12 +2092,26 @@
             document.getElementById('side-menu').classList.remove('active');
         }
 
-        // Contact functions
+        // UPDATED Contact functions with Message Saving
         function contactViaWhatsApp(productName = 'Navgrah Agarbatti') {
             const phoneNumber = '918329323516';
             const message = `Hello, I'm interested in ${productName}. Can you provide more details?`;
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            
+            // Save to database
+            const user = auth.currentUser;
+            const messageData = {
+                userName: user ? user.displayName : 'Guest User',
+                userEmail: user ? user.email : 'guest@example.com',
+                userId: user ? user.uid : 'guest',
+                productName: productName,
+                message: message,
+                phoneNumber: phoneNumber,
+                type: 'whatsapp'
+            };
+            
+            saveMessageToDatabase(messageData, 'whatsapp');
             window.open(whatsappUrl, '_blank');
         }
 
@@ -1584,8 +2121,22 @@
         }
 
         function contactViaMessage(productName = 'Navgrah Agarbatti') {
-            const phoneNumber = '918329323516';
+            const phoneNumber = '919876543210';
             const message = `I'm interested in ${productName}. Please send me more information.`;
+            
+            // Save to database
+            const user = auth.currentUser;
+            const messageData = {
+                userName: user ? user.displayName : 'Guest User',
+                userEmail: user ? user.email : 'guest@example.com',
+                userId: user ? user.uid : 'guest',
+                productName: productName,
+                message: message,
+                phoneNumber: phoneNumber,
+                type: 'sms'
+            };
+            
+            saveMessageToDatabase(messageData, 'sms');
             window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
         }
 
@@ -1598,7 +2149,7 @@
             'order': 'To place an order, you can contact us directly via WhatsApp, call, or message using the contact options in the app.',
             'delivery': 'We deliver across India. Delivery time is 3-7 business days depending on your location.',
             'quality': 'All Navgrah agarbattis are made with 100% natural ingredients and traditional methods for the best quality and fragrance.',
-            'contact': 'You can reach us at +91 8329323516 or email navgrah agarbatti@gmail.com. We\'re available 9 AM - 7 PM.',
+            'contact': 'You can reach us at +91 9876543210 or email support@navgrah.com. We\'re available 9 AM - 8 PM.',
             'thanks': 'You\'re welcome! Let me know if you need any other assistance.',
             'help': 'I can help you with product information, pricing, orders, delivery, and general queries about Navgrah agarbattis.'
         };
@@ -1685,7 +2236,7 @@
             });
         }
 
-        // Create banner element
+        // Create banner element - REMOVED CLICK FUNCTIONALITY
         function createBannerElement(banner) {
             const bannerElement = document.createElement('img');
             bannerElement.className = 'banner';
@@ -1695,13 +2246,8 @@
                 this.src = 'https://via.placeholder.com/300x150/666666/FFFFFF?text=Banner+Image';
             };
             
-            // Add click event if banner has a link
-            if (banner.link && banner.link !== '#') {
-                bannerElement.style.cursor = 'pointer';
-                bannerElement.addEventListener('click', function() {
-                    window.open(banner.link, '_blank');
-                });
-            }
+            // REMOVED: Banner click functionality
+            // Banners are now non-clickable as requested
             
             return bannerElement;
         }
@@ -1827,6 +2373,7 @@
                 showProductDetail(product);
             });
             
+            // Product image and card click now opens product detail (not zoom)
             card.addEventListener('click', () => {
                 showProductDetail(product);
             });
@@ -1834,10 +2381,9 @@
             return card;
         }
 
-        // Show product detail with multiple images
-        function showProductDetail(product) {
+        // UPDATED: Show product detail with NEW image slider and reviews
+        async function showProductDetail(product) {
             state.currentProduct = product;
-            state.currentImageIndex = 0;
             
             const modal = document.getElementById('product-detail-modal');
             const content = document.getElementById('product-detail-content');
@@ -1845,28 +2391,12 @@
             // Get all product images
             const allImages = [product.imageUrl, ...(product.additionalImages || [])].filter(img => img);
             
+            // Load reviews for this product
+            await loadReviews(product.id);
+            
             content.innerHTML = `
                 <div class="product-image-section">
-                    <img class="main-product-image" src="${allImages[0] || 'https://via.placeholder.com/300x300/2E7D32/ffffff?text=Navgrah'}" alt="${product.name}" id="main-product-image">
-                    
-                    ${allImages.length > 1 ? `
-                        <div class="image-navigation">
-                            <button class="nav-btn prev-btn" id="prev-image">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button class="nav-btn next-btn" id="next-image">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    ` : ''}
-                    
-                    ${allImages.length > 1 ? `
-                        <div class="thumbnail-container" id="thumbnail-container">
-                            ${allImages.map((img, index) => `
-                                <img src="${img}" alt="Thumbnail ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
-                            `).join('')}
-                        </div>
-                    ` : ''}
+                    <div id="product-image-slider"></div>
                 </div>
                 <div class="product-detail-info">
                     <h2>${product.name}</h2>
@@ -1925,54 +2455,18 @@
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </div>
+                    
+                    ${renderReviews(product.id)}
                 </div>
             `;
             
-            // Setup image navigation if multiple images exist
-            if (allImages.length > 1) {
-                setupImageNavigation(allImages);
-            }
+            // Initialize image slider
+            initImageSlider(allImages, 'product-image-slider');
+            
+            // Setup review form
+            setupReviewForm(product.id);
             
             modal.classList.add('active');
-        }
-
-        // Setup image navigation for product detail
-        function setupImageNavigation(allImages) {
-            const mainImage = document.getElementById('main-product-image');
-            const prevBtn = document.getElementById('prev-image');
-            const nextBtn = document.getElementById('next-image');
-            const thumbnails = document.querySelectorAll('.thumbnail');
-            
-            function updateImage(index) {
-                state.currentImageIndex = index;
-                mainImage.src = allImages[index];
-                
-                // Update active thumbnail
-                thumbnails.forEach((thumb, i) => {
-                    thumb.classList.toggle('active', i === index);
-                });
-            }
-            
-            // Previous button click
-            prevBtn.addEventListener('click', () => {
-                let newIndex = state.currentImageIndex - 1;
-                if (newIndex < 0) newIndex = allImages.length - 1;
-                updateImage(newIndex);
-            });
-            
-            // Next button click
-            nextBtn.addEventListener('click', () => {
-                let newIndex = state.currentImageIndex + 1;
-                if (newIndex >= allImages.length) newIndex = 0;
-                updateImage(newIndex);
-            });
-            
-            // Thumbnail click
-            thumbnails.forEach((thumb, index) => {
-                thumb.addEventListener('click', () => {
-                    updateImage(index);
-                });
-            });
         }
 
         // Navigation
@@ -2072,6 +2566,34 @@
             });
         }
 
+        // Back Button Functionality
+        function setupBackButton() {
+            // Handle browser back button
+            window.addEventListener('popstate', function(event) {
+                // If product detail modal is open, close it
+                const productModal = document.getElementById('product-detail-modal');
+                if (productModal.classList.contains('active')) {
+                    productModal.classList.remove('active');
+                    // Prevent default back navigation if modal was open
+                    if (window.location.hash === '') {
+                        history.pushState(null, null, '#home');
+                    }
+                }
+            });
+
+            // Override modal close to handle back button
+            const originalCloseModal = closeModal;
+            closeModal = function(modalId) {
+                if (modalId === 'product-detail-modal') {
+                    // If we're going back from product detail, update history
+                    if (history.state && history.state.productDetail) {
+                        history.back();
+                    }
+                }
+                originalCloseModal(modalId);
+            };
+        }
+
         // Initialize App
         function initApp() {
             showLoading();
@@ -2086,6 +2608,9 @@
             
             // Setup chat bot
             setupChatBot();
+            
+            // Setup back button functionality
+            setupBackButton();
             
             // Load data
             loadCategories();
@@ -2179,17 +2704,43 @@
             // Setup modals
             document.querySelectorAll('.close-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    this.closest('.modal').classList.remove('active');
+                    // For product detail modal, use back button functionality
+                    if (this.closest('#product-detail-modal')) {
+                        if (history.state && history.state.productDetail) {
+                            history.back();
+                        } else {
+                            this.closest('.modal').classList.remove('active');
+                        }
+                    } else {
+                        this.closest('.modal').classList.remove('active');
+                    }
                 });
             });
             
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === this) {
-                        this.classList.remove('active');
+                        // For product detail modal, use back button functionality
+                        if (this.id === 'product-detail-modal') {
+                            if (history.state && history.state.productDetail) {
+                                history.back();
+                            } else {
+                                this.classList.remove('active');
+                            }
+                        } else {
+                            this.classList.remove('active');
+                        }
                     }
                 });
             });
+            
+            // Update product detail modal opening to use history
+            const originalShowProductDetail = showProductDetail;
+            showProductDetail = function(product) {
+                // Add to history when opening product detail
+                history.pushState({ productDetail: true }, null, window.location.href);
+                originalShowProductDetail(product);
+            };
             
             // Auth button click
             document.getElementById('auth-btn').addEventListener('click', () => {
