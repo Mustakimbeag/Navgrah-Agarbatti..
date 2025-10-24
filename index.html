@@ -387,7 +387,6 @@
             height: 150px;
             object-fit: cover;
             display: block;
-            /* Removed cursor pointer and transition to disable clicking */
         }
 
         /* Categories Section - New Design */
@@ -446,6 +445,16 @@
             line-height: 1.2;
         }
 
+        /* Category Images - NEW */
+        .category-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 8px;
+            border: 2px solid var(--border-color);
+        }
+
         /* All Products Button */
         .all-products-btn {
             background: var(--primary-color);
@@ -502,9 +511,8 @@
         }
         .product-card img {
             width: 100%;
-            height: 280px; /* Increased image size */
+            height: 280px;
             object-fit: cover;
-            /* Removed cursor: zoom-in */
         }
         .product-info { 
             padding: 15px; 
@@ -574,7 +582,7 @@
         .slider-container {
             display: flex;
             transition: transform 0.5s ease-in-out;
-            height: 500px; /* Increased height */
+            height: 500px;
         }
 
         .slide {
@@ -591,41 +599,15 @@
             object-fit: contain;
             border-radius: 8px;
             background-color: #f9f9f9;
-            /* Removed cursor: zoom-in */
         }
 
-        /* Navigation Arrows */
+        /* Navigation Arrows - HIDDEN */
         .slider-nav {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-            padding: 0 15px;
-            z-index: 10;
+            display: none;
         }
 
         .nav-arrow {
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .nav-arrow:hover {
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: none;
         }
 
         /* Dots Indicator */
@@ -1077,6 +1059,23 @@
             cursor: pointer;
         }
 
+        /* NEW: Product Detail Page Styles */
+        .product-detail-page {
+            padding: 15px;
+        }
+
+        .related-products-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .related-products-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
         /* Responsive Design */
         @media (min-width: 768px) {
             .product-detail-container {
@@ -1086,7 +1085,7 @@
                 width: 50%;
             }
             .slider-container {
-                height: 550px; /* Increased height */
+                height: 550px;
             }
             .product-detail-info {
                 width: 50%;
@@ -1121,7 +1120,7 @@
                 overflow-x: auto;
             }
             .slider-container {
-                height: 400px; /* Adjusted for mobile */
+                height: 400px;
             }
             .nav-arrow {
                 width: 36px;
@@ -1145,7 +1144,7 @@
                 right: 10px;
             }
             .slider-container {
-                height: 350px; /* Adjusted for small mobile */
+                height: 350px;
             }
             .thumbnails {
                 gap: 6px;
@@ -1178,10 +1177,6 @@
                 <i class="fas fa-moon"></i>
             </button>
             <i class="fas fa-search search-icon" title="Search"></i>
-            <div id="login-status-indicator"></div>
-            <button class="btn btn-small" id="auth-btn" style="background: transparent; border: 1px solid white;">
-                <i class="fas fa-user"></i> Login
-            </button>
         </div>
     </header>
 
@@ -1213,20 +1208,6 @@
         <a href="javascript:void(0)" class="menu-item" onclick="contactViaMessage()">
             <i class="fas fa-sms"></i>
             <span>Send Message</span>
-        </a>
-        
-        <div class="menu-section">Account</div>
-        <a href="javascript:void(0)" class="menu-item" data-hash="profile">
-            <i class="fas fa-user"></i>
-            <span>My Profile</span>
-        </a>
-        <a href="javascript:void(0)" class="menu-item" data-hash="settings">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-        </a>
-        <a href="javascript:void(0)" class="menu-item" data-hash="admin-panel">
-            <i class="fas fa-users-cog"></i>
-            <span>Admin Panel</span>
         </a>
         
         <div class="menu-section">Information</div>
@@ -1322,102 +1303,19 @@
             </div>
         </section>
 
-        <!-- Profile Page -->
-        <section id="profile" class="page">
-            <div class="page-content">
-                <h1>My Profile</h1>
-                <div style="padding: 0 15px;">
-                    <div class="profile-info" style="background: var(--card-bg); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--box-shadow);">
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <div id="user-avatar" style="width: 80px; height: 80px; background: var(--primary-color); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        </div>
-                        <div id="user-info">
-                            <p><strong>Name:</strong> <span id="user-name">Guest User</span></p>
-                            <p><strong>Email:</strong> <span id="user-email">Please login</span></p>
-                            <p><strong>Phone:</strong> <span id="user-phone">Not set</span></p>
-                            <p><strong>Address:</strong> <span id="user-address">Not set</span></p>
-                        </div>
-                        <button class="btn google-login-btn" id="google-login-btn">
-                            <i class="fab fa-google"></i> Login with Google
-                        </button>
-                        <button class="btn btn-danger" style="margin-top: 10px; width: 100%; display: none;" id="logout-btn">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Settings Page -->
-        <section id="settings" class="page">
-            <div class="page-content">
-                <h1>App Settings</h1>
-                <div class="settings-section">
-                    <h3>Contact Information</h3>
-                    <div class="contact-info">
-                        <div class="contact-card">
-                            <i class="fas fa-phone" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
-                            <h4>Customer Care</h4>
-                            <p>+91 8329323516</p>
-                        </div>
-                        <div class="contact-card">
-                            <i class="fas fa-envelope" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
-                            <h4>Email Support</h4>
-                            <p>support@navgrah.com</p>
-                        </div>
-                        <div class="contact-card">
-                            <i class="fas fa-clock" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;"></i>
-                            <h4>Business Hours</h4>
-                            <p>9:00 AM - 8:00 PM</p>
-                        </div>
-                    </div>
+        <!-- NEW: Product Detail Page -->
+        <section id="product-detail-page" class="page">
+            <div class="product-detail-page">
+                <div class="product-detail-container" id="product-detail-content">
+                    <!-- Product details loaded dynamically -->
                 </div>
                 
-                <div class="settings-section">
-                    <h3>Website Settings</h3>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
-                        <span>Dark Mode</span>
-                        <button class="btn btn-small" id="toggle-dark-mode">Toggle</button>
+                <!-- Related Products Section -->
+                <div class="related-products-section" id="related-products-section">
+                    <h3>Related Products</h3>
+                    <div id="related-products-container" class="product-grid">
+                        <!-- Related products loaded dynamically -->
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
-                        <span>Notifications</span>
-                        <button class="btn btn-small" id="toggle-notifications">Enable</button>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
-                        <span>Language</span>
-                        <select style="width: auto; margin: 0;">
-                            <option>English</option>
-                            <option>Hindi</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Admin Panel Page -->
-        <section id="admin-panel" class="page">
-            <div class="page-content">
-                <h1>Admin Panel - Users Management</h1>
-                <div class="settings-section">
-                    <h3>Registered Users</h3>
-                    <table class="users-table" id="users-table">
-                        <thead>
-                            <tr>
-                                <th>Photo</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Joined</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users-table-body">
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 20px;">Loading users...</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </section>
@@ -1474,9 +1372,9 @@
             <i class="fas fa-search"></i>
             <span>Search</span>
         </button>
-        <button class="nav-item" data-hash="profile">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
+        <button class="nav-item" id="chat-bot-nav-btn">
+            <i class="fas fa-robot"></i>
+            <span>Assistant</span>
         </button>
     </nav>
 
@@ -1487,59 +1385,9 @@
     <div id="product-detail-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
-            <div class="product-detail-container" id="product-detail-content">
+            <div class="product-detail-container" id="product-detail-modal-content">
                 <!-- Product details loaded dynamically -->
             </div>
-        </div>
-    </div>
-
-    <!-- Auth Modal -->
-    <div id="auth-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2 id="auth-modal-title">Login to Navgrah</h2>
-            <div style="text-align: center; margin: 20px 0;">
-                <button class="btn google-login-btn" id="modal-google-login">
-                    <i class="fab fa-google" style="color: #DB4437;"></i>
-                    Login with Google
-                </button>
-            </div>
-            <form id="auth-form">
-                <div id="auth-tabs" style="display: flex; margin-bottom: 20px;">
-                    <button type="button" class="btn btn-small active" id="login-tab" style="flex: 1; margin-right: 5px;">Login</button>
-                    <button type="button" class="btn btn-small" id="register-tab" style="flex: 1; margin-left: 5px;">Register</button>
-                </div>
-                
-                <div id="login-form">
-                    <input type="email" id="login-email" placeholder="Email" required>
-                    <input type="password" id="login-password" placeholder="Password" required>
-                    <button type="submit" class="btn btn-accent">Login</button>
-                </div>
-                
-                <div id="register-form" style="display: none;">
-                    <input type="text" id="register-name" placeholder="Full Name" required>
-                    <input type="email" id="register-email" placeholder="Email" required>
-                    <input type="password" id="register-password" placeholder="Password" required>
-                    <input type="tel" id="register-phone" placeholder="Phone Number">
-                    <textarea id="register-address" placeholder="Address"></textarea>
-                    <button type="submit" class="btn btn-accent">Register</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit Profile Modal -->
-    <div id="edit-profile-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Edit Profile</h2>
-            <form id="edit-profile-form">
-                <input type="text" id="edit-name" placeholder="Full Name" required>
-                <input type="email" id="edit-email" placeholder="Email" required>
-                <input type="tel" id="edit-phone" placeholder="Phone Number">
-                <textarea id="edit-address" placeholder="Address"></textarea>
-                <button type="submit" class="btn btn-accent">Save Changes</button>
-            </form>
         </div>
     </div>
 
@@ -1558,508 +1406,18 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
         const database = firebase.database();
-        const firestore = firebase.firestore();
         
-        // Set up Google Auth Provider
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('email');
-        provider.addScope('profile');
-
         // Global State
         let state = {
-            user: null,
             categories: [],
             products: [],
             selectedCategory: 'all',
             currentProduct: null,
             chatHistory: [],
             showAllProducts: false,
-            currentImageIndex: 0,
-            reviews: {}
+            currentImageIndex: 0
         };
-
-        // NEW: Reviews System
-        function loadReviews(productId) {
-            return new Promise((resolve) => {
-                database.ref('reviews/' + productId).on('value', (snapshot) => {
-                    const reviews = [];
-                    snapshot.forEach((childSnapshot) => {
-                        reviews.push({
-                            id: childSnapshot.key,
-                            ...childSnapshot.val()
-                        });
-                    });
-                    state.reviews[productId] = reviews;
-                    resolve(reviews);
-                }, (error) => {
-                    console.error('Error loading reviews:', error);
-                    resolve([]);
-                });
-            });
-        }
-
-        function saveReview(productId, reviewData) {
-            return new Promise((resolve, reject) => {
-                const user = auth.currentUser;
-                if (!user) {
-                    reject(new Error('User must be logged in to submit a review'));
-                    return;
-                }
-                
-                const reviewRef = database.ref('reviews/' + productId).push();
-                reviewData.userId = user.uid;
-                reviewData.userName = user.displayName || 'Anonymous';
-                reviewData.userEmail = user.email;
-                reviewData.timestamp = firebase.database.ServerValue.TIMESTAMP;
-                
-                reviewRef.set(reviewData)
-                    .then(() => {
-                        resolve();
-                    })
-                    .catch((error) => {
-                        reject(error);
-                    });
-            });
-        }
-
-        function renderReviews(productId) {
-            const reviews = state.reviews[productId] || [];
-            let reviewsHTML = '';
-            
-            if (reviews.length === 0) {
-                reviewsHTML = `
-                    <div class="no-reviews">
-                        <i class="fas fa-comment-slash"></i>
-                        <p>No reviews yet. Be the first to review this product!</p>
-                    </div>
-                `;
-            } else {
-                reviewsHTML = reviews.map(review => `
-                    <div class="review-item">
-                        <div class="review-header">
-                            <span class="reviewer-name">${review.userName}</span>
-                            <span class="review-date">${new Date(review.timestamp).toLocaleDateString()}</span>
-                        </div>
-                        <div class="review-rating">
-                            ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
-                        </div>
-                        <div class="review-text">${review.comment}</div>
-                    </div>
-                `).join('');
-            }
-            
-            return `
-                <div class="reviews-section">
-                    <div class="reviews-header">
-                        <h3>Customer Reviews (${reviews.length})</h3>
-                        <button class="add-review-btn" id="add-review-btn">
-                            <i class="fas fa-plus"></i> Add Review
-                        </button>
-                    </div>
-                    <div class="reviews-list">
-                        ${reviewsHTML}
-                    </div>
-                    <div class="review-form" id="review-form" style="display: none;">
-                        <h4>Write a Review</h4>
-                        <div class="rating-input">
-                            <label>Rating:</label>
-                            <div class="star-rating" id="star-rating">
-                                <i class="fas fa-star" data-rating="1"></i>
-                                <i class="fas fa-star" data-rating="2"></i>
-                                <i class="fas fa-star" data-rating="3"></i>
-                                <i class="fas fa-star" data-rating="4"></i>
-                                <i class="fas fa-star" data-rating="5"></i>
-                            </div>
-                        </div>
-                        <textarea id="review-comment" placeholder="Share your experience with this product..." required></textarea>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-small" id="cancel-review">Cancel</button>
-                            <button type="button" class="btn btn-small btn-accent" id="submit-review">Submit Review</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function setupReviewForm(productId) {
-            const addReviewBtn = document.getElementById('add-review-btn');
-            const reviewForm = document.getElementById('review-form');
-            const cancelReviewBtn = document.getElementById('cancel-review');
-            const submitReviewBtn = document.getElementById('submit-review');
-            const starRating = document.getElementById('star-rating');
-            const stars = starRating.querySelectorAll('i');
-            let selectedRating = 0;
-            
-            // Star rating selection
-            stars.forEach(star => {
-                star.addEventListener('mouseover', () => {
-                    const rating = parseInt(star.getAttribute('data-rating'));
-                    highlightStars(rating);
-                });
-                
-                star.addEventListener('mouseout', () => {
-                    highlightStars(selectedRating);
-                });
-                
-                star.addEventListener('click', () => {
-                    selectedRating = parseInt(star.getAttribute('data-rating'));
-                    highlightStars(selectedRating);
-                });
-            });
-            
-            function highlightStars(rating) {
-                stars.forEach((star, index) => {
-                    if (index < rating) {
-                        star.classList.add('active');
-                    } else {
-                        star.classList.remove('active');
-                    }
-                });
-            }
-            
-            // Show/hide review form
-            addReviewBtn.addEventListener('click', () => {
-                if (!auth.currentUser) {
-                    showToast('Please login to submit a review', 'warning');
-                    document.getElementById('auth-modal').classList.add('active');
-                    return;
-                }
-                
-                reviewForm.style.display = 'block';
-                addReviewBtn.style.display = 'none';
-                selectedRating = 0;
-                highlightStars(0);
-                document.getElementById('review-comment').value = '';
-            });
-            
-            cancelReviewBtn.addEventListener('click', () => {
-                reviewForm.style.display = 'none';
-                addReviewBtn.style.display = 'block';
-            });
-            
-            // Submit review
-            submitReviewBtn.addEventListener('click', () => {
-                const comment = document.getElementById('review-comment').value.trim();
-                
-                if (selectedRating === 0) {
-                    showToast('Please select a rating', 'warning');
-                    return;
-                }
-                
-                if (comment === '') {
-                    showToast('Please write a review comment', 'warning');
-                    return;
-                }
-                
-                saveReview(productId, {
-                    rating: selectedRating,
-                    comment: comment
-                }).then(() => {
-                    showToast('Review submitted successfully!', 'success');
-                    reviewForm.style.display = 'none';
-                    addReviewBtn.style.display = 'block';
-                    
-                    // Reload reviews
-                    loadReviews(productId).then(() => {
-                        // Re-render the reviews section
-                        const reviewsSection = document.querySelector('.reviews-section');
-                        if (reviewsSection) {
-                            reviewsSection.outerHTML = renderReviews(productId);
-                            setupReviewForm(productId);
-                        }
-                    });
-                }).catch(error => {
-                    showToast('Error submitting review: ' + error.message, 'error');
-                });
-            });
-        }
-
-        // NEW: Image Slider Functions
-        function initImageSlider(images, containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            container.innerHTML = `
-                <div class="image-slider">
-                    <div class="slider-container" id="${containerId}-slider">
-                        ${images.map((img, index) => `
-                            <div class="slide">
-                                <img src="${img}" alt="Product Image ${index + 1}">
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    <div class="slider-nav">
-                        <button class="nav-arrow prev-arrow" onclick="prevSlide('${containerId}')">&#10094;</button>
-                        <button class="nav-arrow next-arrow" onclick="nextSlide('${containerId}')">&#10095;</button>
-                    </div>
-                </div>
-                
-                <div class="dots-container" id="${containerId}-dots">
-                    ${images.map((_, index) => `
-                        <div class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide('${containerId}', ${index})"></div>
-                    `).join('')}
-                </div>
-                
-                <div class="thumbnails" id="${containerId}-thumbnails">
-                    ${images.map((img, index) => `
-                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="goToSlide('${containerId}', ${index})">
-                            <img src="${img}" alt="Thumbnail ${index + 1}">
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            // Initialize slider state
-            if (!window.sliderState) window.sliderState = {};
-            window.sliderState[containerId] = {
-                currentSlide: 0,
-                totalSlides: images.length
-            };
-
-            // Add touch events for mobile
-            setupTouchEvents(`${containerId}-slider`, containerId);
-        }
-
-        function goToSlide(containerId, slideIndex) {
-            const state = window.sliderState[containerId];
-            if (!state) return;
-
-            state.currentSlide = slideIndex;
-            updateSliderPosition(containerId);
-            updateIndicators(containerId);
-        }
-
-        function nextSlide(containerId) {
-            const state = window.sliderState[containerId];
-            if (!state) return;
-
-            state.currentSlide = (state.currentSlide + 1) % state.totalSlides;
-            updateSliderPosition(containerId);
-            updateIndicators(containerId);
-        }
-
-        function prevSlide(containerId) {
-            const state = window.sliderState[containerId];
-            if (!state) return;
-
-            state.currentSlide = (state.currentSlide - 1 + state.totalSlides) % state.totalSlides;
-            updateSliderPosition(containerId);
-            updateIndicators(containerId);
-        }
-
-        function updateSliderPosition(containerId) {
-            const state = window.sliderState[containerId];
-            if (!state) return;
-
-            const slider = document.getElementById(`${containerId}-slider`);
-            if (slider) {
-                slider.style.transform = `translateX(-${state.currentSlide * 100}%)`;
-            }
-        }
-
-        function updateIndicators(containerId) {
-            const state = window.sliderState[containerId];
-            if (!state) return;
-
-            // Update dots
-            const dots = document.querySelectorAll(`#${containerId}-dots .dot`);
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === state.currentSlide);
-            });
-
-            // Update thumbnails
-            const thumbnails = document.querySelectorAll(`#${containerId}-thumbnails .thumbnail`);
-            thumbnails.forEach((thumbnail, index) => {
-                thumbnail.classList.toggle('active', index === state.currentSlide);
-            });
-        }
-
-        function setupTouchEvents(sliderId, containerId) {
-            const slider = document.getElementById(sliderId);
-            if (!slider) return;
-
-            let startX = 0;
-            let endX = 0;
-
-            slider.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            });
-
-            slider.addEventListener('touchend', (e) => {
-                endX = e.changedTouches[0].clientX;
-                handleSwipe(containerId);
-            });
-
-            function handleSwipe(containerId) {
-                const swipeThreshold = 50;
-                
-                if (startX - endX > swipeThreshold) {
-                    // Swipe Left - Next Slide
-                    nextSlide(containerId);
-                } else if (endX - startX > swipeThreshold) {
-                    // Swipe Right - Previous Slide
-                    prevSlide(containerId);
-                }
-            }
-        }
-
-        // Messages Saving Function
-        function saveMessageToDatabase(messageData, type = 'whatsapp') {
-            const messageRef = database.ref('messages/' + type).push();
-            messageData.timestamp = firebase.database.ServerValue.TIMESTAMP;
-            messageRef.set(messageData)
-                .then(() => {
-                    console.log('Message saved successfully to database');
-                })
-                .catch((error) => {
-                    console.error('Error saving message:', error);
-                });
-        }
-
-        // Firebase Authentication Functions
-        async function signInWithGoogle() {
-            try {
-                showLoading();
-                const result = await firebase.auth().signInWithPopup(provider);
-                const user = result.user;
-                
-                // Save user data to Firestore
-                await saveUserToFirestore(user);
-                
-                hideLoading();
-                showToast('Successfully logged in with Google!', 'success');
-                closeModal('auth-modal');
-            } catch (error) {
-                hideLoading();
-                console.error('Google login error:', error);
-                showToast('Login failed: ' + error.message, 'error');
-            }
-        }
-
-        async function saveUserToFirestore(user) {
-            try {
-                const userRef = firestore.collection("users").doc(user.uid);
-                const userDoc = await userRef.get();
-                
-                if (!userDoc.exists) {
-                    // User doesn't exist, create new document
-                    await userRef.set({
-                        uid: user.uid,
-                        displayName: user.displayName,
-                        email: user.email,
-                        photoURL: user.photoURL,
-                        phoneNumber: user.phoneNumber || '',
-                        provider: 'google',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                } else {
-                    // User exists, update last login
-                    await userRef.update({
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-            } catch (error) {
-                console.error('Error saving user to Firestore:', error);
-            }
-        }
-
-        async function signOutUser() {
-            try {
-                await auth.signOut();
-                showToast('Successfully logged out!', 'success');
-            } catch (error) {
-                console.error('Logout error:', error);
-                showToast('Logout failed: ' + error.message, 'error');
-            }
-        }
-
-        async function loadUsersFromFirestore() {
-            try {
-                const querySnapshot = await firestore.collection("users").get();
-                const usersTableBody = document.getElementById('users-table-body');
-                usersTableBody.innerHTML = '';
-                
-                if (querySnapshot.empty) {
-                    usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">No users found</td></tr>';
-                    return;
-                }
-                
-                querySnapshot.forEach((doc) => {
-                    const user = doc.data();
-                    const row = document.createElement('tr');
-                    
-                    row.innerHTML = `
-                        <td>
-                            ${user.photoURL ? 
-                                `<img src="${user.photoURL}" alt="${user.displayName}" class="user-avatar">` : 
-                                `<div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white;">
-                                    <i class="fas fa-user"></i>
-                                </div>`
-                            }
-                        </td>
-                        <td>${user.displayName || 'N/A'}</td>
-                        <td>${user.email || 'N/A'}</td>
-                        <td>${user.phoneNumber || 'N/A'}</td>
-                        <td>${user.createdAt ? new Date(user.createdAt.toDate()).toLocaleDateString() : 'N/A'}</td>
-                    `;
-                    
-                    usersTableBody.appendChild(row);
-                });
-            } catch (error) {
-                console.error('Error loading users:', error);
-                document.getElementById('users-table-body').innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--danger-color);">Error loading users</td></tr>';
-            }
-        }
-
-        // Auth state listener for auto-login
-        function setupAuthListener() {
-            auth.onAuthStateChanged((user) => {
-                const googleLoginBtn = document.getElementById('google-login-btn');
-                const logoutBtn = document.getElementById('logout-btn');
-                const userAvatar = document.getElementById('user-avatar');
-                const userName = document.getElementById('user-name');
-                const userEmail = document.getElementById('user-email');
-                const loginStatusIndicator = document.getElementById('login-status-indicator');
-                const authBtn = document.getElementById('auth-btn');
-                
-                if (user) {
-                    // User is signed in
-                    googleLoginBtn.style.display = 'none';
-                    logoutBtn.style.display = 'block';
-                    loginStatusIndicator.classList.add('active');
-                    authBtn.innerHTML = '<i class="fas fa-user"></i> ' + (user.displayName || 'User');
-                    
-                    // Update user profile
-                    if (user.photoURL) {
-                        userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-                    } else {
-                        userAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    }
-                    userName.textContent = user.displayName || 'User';
-                    userEmail.textContent = user.email;
-                    
-                    // Load users data for admin panel
-                    loadUsersFromFirestore();
-                } else {
-                    // User is signed out
-                    googleLoginBtn.style.display = 'block';
-                    logoutBtn.style.display = 'none';
-                    loginStatusIndicator.classList.remove('active');
-                    authBtn.innerHTML = '<i class="fas fa-user"></i> Login';
-                    
-                    // Reset user profile
-                    userAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    userName.textContent = 'Guest User';
-                    userEmail.textContent = 'Please login';
-                    document.getElementById('user-phone').textContent = 'Not set';
-                    document.getElementById('user-address').textContent = 'Not set';
-                }
-            });
-        }
 
         // Utility Functions
         function showLoading() {
@@ -2092,26 +1450,12 @@
             document.getElementById('side-menu').classList.remove('active');
         }
 
-        // UPDATED Contact functions with Message Saving
+        // Contact functions
         function contactViaWhatsApp(productName = 'Navgrah Agarbatti') {
             const phoneNumber = '918329323516';
             const message = `Hello, I'm interested in ${productName}. Can you provide more details?`;
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-            
-            // Save to database
-            const user = auth.currentUser;
-            const messageData = {
-                userName: user ? user.displayName : 'Guest User',
-                userEmail: user ? user.email : 'guest@example.com',
-                userId: user ? user.uid : 'guest',
-                productName: productName,
-                message: message,
-                phoneNumber: phoneNumber,
-                type: 'whatsapp'
-            };
-            
-            saveMessageToDatabase(messageData, 'whatsapp');
             window.open(whatsappUrl, '_blank');
         }
 
@@ -2121,38 +1465,10 @@
         }
 
         function contactViaMessage(productName = 'Navgrah Agarbatti') {
-            const phoneNumber = '919876543210';
+            const phoneNumber = '918329323516';
             const message = `I'm interested in ${productName}. Please send me more information.`;
-            
-            // Save to database
-            const user = auth.currentUser;
-            const messageData = {
-                userName: user ? user.displayName : 'Guest User',
-                userEmail: user ? user.email : 'guest@example.com',
-                userId: user ? user.uid : 'guest',
-                productName: productName,
-                message: message,
-                phoneNumber: phoneNumber,
-                type: 'sms'
-            };
-            
-            saveMessageToDatabase(messageData, 'sms');
             window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
         }
-
-        // Chat Bot Responses
-        const chatBotResponses = {
-            'hello': 'Hello! Welcome to Navgrah Agarbatti. How can I assist you today?',
-            'hi': 'Hi there! I\'m here to help you with our premium agarbatti products.',
-            'product': 'We offer a wide range of premium agarbattis including Masala Agarbatti, Floral Agarbatti, Herbal Agarbatti, Sandalwood, Dhoop, and Cones. Which type are you interested in?',
-            'price': 'Our agarbattis start from ₹50 and go up to ₹500 depending on the pack size and fragrance. Would you like to know about specific products?',
-            'order': 'To place an order, you can contact us directly via WhatsApp, call, or message using the contact options in the app.',
-            'delivery': 'We deliver across India. Delivery time is 3-7 business days depending on your location.',
-            'quality': 'All Navgrah agarbattis are made with 100% natural ingredients and traditional methods for the best quality and fragrance.',
-            'contact': 'You can reach us at +91 9876543210 or email support@navgrah.com. We\'re available 9 AM - 8 PM.',
-            'thanks': 'You\'re welcome! Let me know if you need any other assistance.',
-            'help': 'I can help you with product information, pricing, orders, delivery, and general queries about Navgrah agarbattis.'
-        };
 
         // Data Loading Functions
         function loadCategories() {
@@ -2166,6 +1482,9 @@
                 });
                 renderCategories();
                 renderAllCategories();
+            }, (error) => {
+                console.error('Error loading categories:', error);
+                showToast('Error loading categories', 'error');
             });
         }
 
@@ -2179,6 +1498,9 @@
                     });
                 });
                 renderProducts();
+            }, (error) => {
+                console.error('Error loading products:', error);
+                showToast('Error loading products', 'error');
             });
         }
 
@@ -2191,6 +1513,9 @@
                     banners.push(banner);
                 });
                 renderBanners(banners);
+            }, (error) => {
+                console.error('Error loading banners:', error);
+                showToast('Error loading banners', 'error');
             });
         }
 
@@ -2246,15 +1571,14 @@
                 this.src = 'https://via.placeholder.com/300x150/666666/FFFFFF?text=Banner+Image';
             };
             
-            // REMOVED: Banner click functionality
-            // Banners are now non-clickable as requested
-            
             return bannerElement;
         }
 
         // Render Functions
         function renderCategories() {
             const container = document.getElementById('categories-container');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             state.categories.slice(0, 6).forEach(category => {
@@ -2262,8 +1586,13 @@
                 categoryCard.className = `category-card ${state.selectedCategory === category.id ? 'active' : ''}`;
                 categoryCard.setAttribute('data-category', category.id);
                 
+                // Use category image if available, otherwise use icon
+                const imageHtml = category.imageUrl 
+                    ? `<img src="${category.imageUrl}" alt="${category.name}" class="category-image">`
+                    : `<i class="${category.icon || 'fas fa-fire'}"></i>`;
+                
                 categoryCard.innerHTML = `
-                    <i class="${category.icon || 'fas fa-fire'}"></i>
+                    ${imageHtml}
                     <h3>${category.name}</h3>
                 `;
                 
@@ -2283,6 +1612,8 @@
 
         function renderAllCategories() {
             const container = document.getElementById('all-categories-container');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             state.categories.forEach(category => {
@@ -2290,8 +1621,13 @@
                 categoryCard.className = `category-card ${state.selectedCategory === category.id ? 'active' : ''}`;
                 categoryCard.setAttribute('data-category', category.id);
                 
+                // Use category image if available, otherwise use icon
+                const imageHtml = category.imageUrl 
+                    ? `<img src="${category.imageUrl}" alt="${category.name}" class="category-image">`
+                    : `<i class="${category.icon || 'fas fa-fire'}"></i>`;
+                
                 categoryCard.innerHTML = `
-                    <i class="${category.icon || 'fas fa-fire'}"></i>
+                    ${imageHtml}
                     <h3>${category.name}</h3>
                 `;
                 
@@ -2308,6 +1644,8 @@
 
         function renderProducts() {
             const container = document.getElementById('product-grid');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             let filteredProducts = state.products;
@@ -2370,33 +1708,61 @@
             
             card.querySelector('.view-details-btn').addEventListener('click', (e) => {
                 e.stopPropagation();
-                showProductDetail(product);
+                showProductDetailPage(product);
             });
             
-            // Product image and card click now opens product detail (not zoom)
+            // Product image and card click now opens product detail page
             card.addEventListener('click', () => {
-                showProductDetail(product);
+                showProductDetailPage(product);
             });
             
             return card;
         }
 
-        // UPDATED: Show product detail with NEW image slider and reviews
-        async function showProductDetail(product) {
+        // NEW: Show product detail on dedicated page
+        function showProductDetailPage(product) {
             state.currentProduct = product;
             
-            const modal = document.getElementById('product-detail-modal');
             const content = document.getElementById('product-detail-content');
             
             // Get all product images
             const allImages = [product.imageUrl, ...(product.additionalImages || [])].filter(img => img);
             
-            // Load reviews for this product
-            await loadReviews(product.id);
+            // Create image slider HTML
+            let sliderHtml = '';
+            if (allImages.length > 0) {
+                sliderHtml = `
+                    <div class="image-slider">
+                        <div class="slider-container" id="product-detail-slider">
+                            ${allImages.map((img, index) => `
+                                <div class="slide">
+                                    <img src="${img}" alt="Product Image ${index + 1}">
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- Dots Indicator -->
+                        <div class="dots-container" id="product-detail-dots">
+                            ${allImages.map((_, index) => `
+                                <div class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide('product-detail', ${index})"></div>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- Thumbnail Images -->
+                        <div class="thumbnails" id="product-detail-thumbnails">
+                            ${allImages.map((img, index) => `
+                                <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="goToSlide('product-detail', ${index})">
+                                    <img src="${img}" alt="Thumbnail ${index + 1}">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
             
             content.innerHTML = `
                 <div class="product-image-section">
-                    <div id="product-image-slider"></div>
+                    ${sliderHtml}
                 </div>
                 <div class="product-detail-info">
                     <h2>${product.name}</h2>
@@ -2455,18 +1821,134 @@
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </div>
-                    
-                    ${renderReviews(product.id)}
                 </div>
             `;
             
             // Initialize image slider
-            initImageSlider(allImages, 'product-image-slider');
+            if (allImages.length > 1) {
+                initImageSlider(allImages, 'product-detail');
+            }
             
-            // Setup review form
-            setupReviewForm(product.id);
+            // Load related products
+            loadRelatedProducts(product);
             
-            modal.classList.add('active');
+            // Navigate to product detail page
+            navigateToPage('product-detail-page');
+            window.location.hash = 'product-detail-page';
+        }
+
+        // NEW: Image Slider Functions (with arrows removed)
+        function initImageSlider(images, containerId) {
+            const container = document.getElementById(containerId + '-slider');
+            if (!container) return;
+
+            // Initialize slider state
+            if (!window.sliderState) window.sliderState = {};
+            window.sliderState[containerId] = {
+                currentSlide: 0,
+                totalSlides: images.length
+            };
+
+            // Add touch events for mobile
+            setupTouchEvents(containerId + '-slider', containerId);
+        }
+
+        function goToSlide(containerId, slideIndex) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            state.currentSlide = slideIndex;
+            updateSliderPosition(containerId);
+            updateIndicators(containerId);
+        }
+
+        function updateSliderPosition(containerId) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            const slider = document.getElementById(containerId + '-slider');
+            if (slider) {
+                slider.style.transform = `translateX(-${state.currentSlide * 100}%)`;
+            }
+        }
+
+        function updateIndicators(containerId) {
+            const state = window.sliderState[containerId];
+            if (!state) return;
+
+            // Update dots
+            const dots = document.querySelectorAll(`#${containerId}-dots .dot`);
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === state.currentSlide);
+            });
+
+            // Update thumbnails
+            const thumbnails = document.querySelectorAll(`#${containerId}-thumbnails .thumbnail`);
+            thumbnails.forEach((thumbnail, index) => {
+                thumbnail.classList.toggle('active', index === state.currentSlide);
+            });
+        }
+
+        function setupTouchEvents(sliderId, containerId) {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
+
+            let startX = 0;
+            let endX = 0;
+
+            slider.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+
+            slider.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe(containerId);
+            });
+
+            function handleSwipe(containerId) {
+                const swipeThreshold = 50;
+                const state = window.sliderState[containerId];
+                if (!state) return;
+                
+                if (startX - endX > swipeThreshold) {
+                    // Swipe Left - Next Slide
+                    state.currentSlide = (state.currentSlide + 1) % state.totalSlides;
+                    updateSliderPosition(containerId);
+                    updateIndicators(containerId);
+                } else if (endX - startX > swipeThreshold) {
+                    // Swipe Right - Previous Slide
+                    state.currentSlide = (state.currentSlide - 1 + state.totalSlides) % state.totalSlides;
+                    updateSliderPosition(containerId);
+                    updateIndicators(containerId);
+                }
+            }
+        }
+
+        // NEW: Load related products
+        function loadRelatedProducts(currentProduct) {
+            const relatedProductsContainer = document.getElementById('related-products-container');
+            if (!relatedProductsContainer) return;
+
+            // Filter products by same category, excluding current product
+            const relatedProducts = state.products.filter(product => 
+                product.category === currentProduct.category && 
+                product.id !== currentProduct.id
+            );
+
+            relatedProductsContainer.innerHTML = '';
+
+            if (relatedProducts.length === 0) {
+                document.getElementById('related-products-section').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('related-products-section').style.display = 'block';
+
+            // Show up to 4 related products
+            relatedProducts.slice(0, 4).forEach(product => {
+                const productCard = createProductCard(product);
+                relatedProductsContainer.appendChild(productCard);
+            });
         }
 
         // Navigation
@@ -2511,28 +1993,18 @@
             function getBotResponse(userMessage) {
                 const lowerMessage = userMessage.toLowerCase();
                 
-                for (const [key, response] of Object.entries(chatBotResponses)) {
-                    if (lowerMessage.includes(key)) {
-                        return response;
-                    }
+                // Simple response logic
+                if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                    return 'Hello! Welcome to Navgrah Agarbatti. How can I assist you today?';
+                } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                    return 'Our agarbatti prices range from ₹50 to ₹500 depending on the type and pack size.';
+                } else if (lowerMessage.includes('delivery')) {
+                    return 'We offer free delivery on orders above ₹500. Standard delivery takes 3-5 business days.';
+                } else if (lowerMessage.includes('order')) {
+                    return 'You can place an order by contacting us via WhatsApp, call, or message.';
+                } else {
+                    return 'Thank you for your message. Our executive will contact you shortly.';
                 }
-
-                // Check for product-related queries
-                if (lowerMessage.includes('masala')) {
-                    return 'Masala Agarbatti is our traditional blend with authentic spices and herbs. Available in packs of 10, 20, and 50 sticks. Price starts from ₹60.';
-                } else if (lowerMessage.includes('floral') || lowerMessage.includes('flower')) {
-                    return 'Floral Agarbatti offers beautiful flower fragrances like Rose, Jasmine, and Lotus. Available in packs of 15, 30, and 60 sticks starting from ₹70.';
-                } else if (lowerMessage.includes('herbal')) {
-                    return 'Herbal Agarbatti is made with natural herbs and Ayurvedic ingredients. Pack sizes: 12, 24, 48 sticks. Starting price: ₹80.';
-                } else if (lowerMessage.includes('sandalwood') || lowerMessage.includes('chandan')) {
-                    return 'Sandalwood agarbatti has a rich, woody fragrance. Available in packs of 10, 20, 40 sticks from ₹90.';
-                } else if (lowerMessage.includes('dhoop')) {
-                    return 'Dhoop sticks provide intense fragrance and longer burn time. Available in packs of 20, 40, 80 sticks from ₹50.';
-                } else if (lowerMessage.includes('cone')) {
-                    return 'Agarbatti cones are perfect for special occasions. Available in packs of 12, 24, 48 cones from ₹40.';
-                }
-
-                return 'I understand you\'re asking about: "' + userMessage + '". For detailed information about our products, please check the product details or contact our customer support.';
             }
 
             function sendMessage() {
@@ -2564,53 +2036,19 @@
                 chatModal.classList.add('active');
                 closeSideMenu();
             });
-        }
 
-        // Back Button Functionality
-        function setupBackButton() {
-            // Handle browser back button
-            window.addEventListener('popstate', function(event) {
-                // If product detail modal is open, close it
-                const productModal = document.getElementById('product-detail-modal');
-                if (productModal.classList.contains('active')) {
-                    productModal.classList.remove('active');
-                    // Prevent default back navigation if modal was open
-                    if (window.location.hash === '') {
-                        history.pushState(null, null, '#home');
-                    }
-                }
+            // Chat bot from bottom nav
+            document.getElementById('chat-bot-nav-btn').addEventListener('click', () => {
+                chatModal.classList.add('active');
             });
-
-            // Override modal close to handle back button
-            const originalCloseModal = closeModal;
-            closeModal = function(modalId) {
-                if (modalId === 'product-detail-modal') {
-                    // If we're going back from product detail, update history
-                    if (history.state && history.state.productDetail) {
-                        history.back();
-                    }
-                }
-                originalCloseModal(modalId);
-            };
         }
 
         // Initialize App
         function initApp() {
             showLoading();
             
-            // Setup Firebase Auth listener
-            setupAuthListener();
-            
-            // Setup Google login buttons
-            document.getElementById('google-login-btn').addEventListener('click', signInWithGoogle);
-            document.getElementById('modal-google-login').addEventListener('click', signInWithGoogle);
-            document.getElementById('logout-btn').addEventListener('click', signOutUser);
-            
             // Setup chat bot
             setupChatBot();
-            
-            // Setup back button functionality
-            setupBackButton();
             
             // Load data
             loadCategories();
@@ -2659,10 +2097,6 @@
                     const pageId = item.getAttribute('data-hash');
                     if (pageId) {
                         navigateToPage(pageId);
-                    } else if (item.id === 'about-us-btn') {
-                        navigateToPage('about-company');
-                    } else if (item.id === 'website-settings-btn') {
-                        navigateToPage('settings');
                     }
                     closeSideMenu();
                 });
@@ -2704,77 +2138,19 @@
             // Setup modals
             document.querySelectorAll('.close-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // For product detail modal, use back button functionality
-                    if (this.closest('#product-detail-modal')) {
-                        if (history.state && history.state.productDetail) {
-                            history.back();
-                        } else {
-                            this.closest('.modal').classList.remove('active');
-                        }
-                    } else {
-                        this.closest('.modal').classList.remove('active');
-                    }
+                    this.closest('.modal').classList.remove('active');
                 });
             });
             
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === this) {
-                        // For product detail modal, use back button functionality
-                        if (this.id === 'product-detail-modal') {
-                            if (history.state && history.state.productDetail) {
-                                history.back();
-                            } else {
-                                this.classList.remove('active');
-                            }
-                        } else {
-                            this.classList.remove('active');
-                        }
+                        this.classList.remove('active');
                     }
                 });
             });
             
-            // Update product detail modal opening to use history
-            const originalShowProductDetail = showProductDetail;
-            showProductDetail = function(product) {
-                // Add to history when opening product detail
-                history.pushState({ productDetail: true }, null, window.location.href);
-                originalShowProductDetail(product);
-            };
-            
-            // Auth button click
-            document.getElementById('auth-btn').addEventListener('click', () => {
-                if (auth.currentUser) {
-                    signOutUser();
-                } else {
-                    document.getElementById('auth-modal').classList.add('active');
-                }
-            });
-            
-            // Auth tabs
-            document.getElementById('login-tab').addEventListener('click', () => {
-                document.getElementById('login-tab').classList.add('active');
-                document.getElementById('register-tab').classList.remove('active');
-                document.getElementById('login-form').style.display = 'block';
-                document.getElementById('register-form').style.display = 'none';
-                document.getElementById('auth-modal-title').textContent = 'Login to Navgrah';
-            });
-
-            document.getElementById('register-tab').addEventListener('click', () => {
-                document.getElementById('register-tab').classList.add('active');
-                document.getElementById('login-tab').classList.remove('active');
-                document.getElementById('register-form').style.display = 'block';
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('auth-modal-title').textContent = 'Register for Navgrah';
-            });
-            
             // Dark mode toggle
-            document.getElementById('toggle-dark-mode').addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
-                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
-            });
-            
-            // Header dark mode toggle
             document.getElementById('dark-mode-toggle').addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
                 localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
@@ -2784,6 +2160,18 @@
             if (localStorage.getItem('darkMode') === 'enabled') {
                 document.body.classList.add('dark-mode');
             }
+            
+            // BACK BUTTON FIX: Hash change event listener
+            window.addEventListener('hashchange', () => {
+                const pageId = window.location.hash.replace('#', '') || 'home';
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+
+                if (pageId === 'product-detail-page') {
+                    document.getElementById('product-detail-page').classList.add('active');
+                } else {
+                    document.getElementById('home').classList.add('active');
+                }
+            });
             
             // Hide loading after initialization
             setTimeout(() => {
